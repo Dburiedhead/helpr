@@ -1,0 +1,33 @@
+<footer>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-5" id="app-footer">
+        <div class="container-fluid">
+            <%= link_to "Helpr", root_path, class: "navbar-brand" %>
+            <div class="col-6">
+                <h5>Pages</h5>
+                <ul class="list-group list-group-flush footer-list">
+                    <% if user_signed_in? %>
+                        <li>
+                            <%= link_to('Requests', root_path, class: "list-group-item footer-link") %>
+                        </li>
+                        <li>
+                            <a href="./dashboard" data-rb-event-key="./dashboard" class="list-group-item footer-link">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="./messages" data-rb-event-key="./messages" class="list-group-item footer-link">Messages</a>
+                        </li>
+                        <li>
+                            <a href="./test" data-rb-event-key="./test" class="list-group-item footer-link">Test</a>
+                        </li>
+                    <% else %>
+                        <li>
+                            <%= link_to('Home', root_path, class: "list-group-item footer-link") %>
+                        </li>
+                        <li>
+                            <%= link_to('Login', new_user_session_path, class: "list-group-item footer-link") %>
+                        </li>
+                    <% end %>
+                </ul>
+            </div>    
+        </div>
+    </nav>
+</footer>

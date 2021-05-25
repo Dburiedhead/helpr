@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HelprReact</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_pack_tag 'application'%>
+    <% if user_signed_in? %>
+      <%= javascript_pack_tag 'index' %>
+    <% end %>
+  </head>
+
+  <body>
+    <%= render "shared/navigation" %>
+    <%= render "shared/flash" %>
+    <%= yield %>
+    <% unless user_signed_in? %>
+      <%= render "shared/footer" %>
+    <% end %>
+  </body>
+</html>

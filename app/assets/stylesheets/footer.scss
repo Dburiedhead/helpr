@@ -1,0 +1,26 @@
+nav#app-footer.navbar.navbar-expand-lg.navbar-dark.mb-5 {
+    margin-bottom: 0 !important;
+    background-color: #000000f2;
+}
+
+footer h5 {
+    color: #fff;
+}
+
+.list-group.list-group-flush.footer-list {
+    list-style: none;
+}
+
+.list-group-item.footer-link {
+    color: rgba(255, 255, 255, 0.63);
+    background-color: transparent;
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    padding: .75rem 0;
+}
+
+.list-group-item.footer-link:hover {
+    color: rgba(255, 255, 255, 0.822);
+    text-decoration: none;
+}
