@@ -15,7 +15,7 @@ import axios from 'axios';
 
 class Request extends Component {
     
-    constructor(props) {
+    constructor() {
         super();
         this.state = {
             request: [],
@@ -23,8 +23,8 @@ class Request extends Component {
         }
     }
     
-    componentDidMount(props) {
-        const req_id = props.match.params.id
+    componentDidMount() {
+        const req_id = this.props.match.params.id
         axios.get(`/api/v1/requests/${req_id}}`).then(res => {
             let request = res.data
             this.setState({ request })

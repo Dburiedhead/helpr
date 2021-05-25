@@ -58,7 +58,7 @@ class Api::V1::ResponsesController < ApplicationController
         end
         
         def response_params
-            params.require(:response).permit(:message, :selected)
+            params.require(:response).permit(:message, :selected, :request_id)
         end
 
         def authorized?

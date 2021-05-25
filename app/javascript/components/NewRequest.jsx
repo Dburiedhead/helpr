@@ -90,7 +90,8 @@ class NewRequest extends Component {
                   </MapGL>
               </div>
             </Col>
-            <RequestForm latitude={this.state.requestLat} longitude={this.state.requestLong}/>
+            {/* { this.state.requestLat && this.state.requestLog && <RequestForm latitude={this.state.requestLat} longitude={this.state.requestLong}/> } */}
+            <RequestForm key={ this.state.requestLat } latitude={this.state.requestLat} longitude={this.state.requestLong}/>
           </Row>
         );
       }
