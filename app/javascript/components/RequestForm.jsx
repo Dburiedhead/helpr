@@ -17,14 +17,14 @@ const selectOptions = [
 
 class RequestForm extends Component {
 
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       description: '',
       title: '',
       request_type: '',
-      latitude: '',
-      longitude: ''
+      latitude: props.latitude,
+      longitude: props.longitude
     }
   }
 
@@ -43,7 +43,7 @@ class RequestForm extends Component {
       longitude: this.props.longitude
     };
     console.log(data)
-    axios.post('http://localhost:3001/api/v1/requests', data)
+    axios.post('api/v1/requests', data)
         .then(res => {
             if (res.request.status === 201) {
                 alert('Request sent ! Thank you for your participation');
