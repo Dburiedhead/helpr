@@ -7,52 +7,35 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Markers from './Markers';
 
-const data = {
-    // id: 'mysource',
-    type: 'geojson',
-    features: [
-        {type: 'Feature',
-        geometry: {
-            type: 'Feature',
-            coordinates: [
-                [48.911606, 2.220036],
-                [48.909669, 2.217178]
-            ]}
-        },
-
-    ]
-  };
-
-  const aLayer = {
-    // source: {
-    //     type: "vector",
-    //     url: "mapbox://mapbox.04w69w5j"
-    // },
-    // source: {
-    //     // id: 'point',
-    //     type: "geojson",
-    //     features: [
-    //         {type: 'Point',
-    //         geometry: {
-    //             type: 'Feature',
-    //             coordinates: [
-    //                 [48.911606, 2.220036],
-    //                 [48.909669, 2.217178]
-    //             ]}
-    //         },
-    
-    //     ]
-    // },
-    id: 'point',
-    // 'source': 'airports',
-    // 'source-layer': 'ne_10m_airports',
-    type: 'circle',
-    paint: {
-        'circle-color': '#4264fb',
-        'circle-radius': 4,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff'
+function setFeatures() {
+    for (var x = -120; x < 120; x += 20) {
+        for (var y = -80; y < 80; y += 10) {
+            features.push({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [x, y]
+                },
+                properties: {
+                    'marker-color': '#000',
+                    'marker-symbol': 'star-stroked',
+                    title: [x, y].join(',')
+                }
+            });
+        }
     }
+}
+
+  let features = []
+
+  const layerSource = {
+    type: 'FeatureCollection',
+    features: features,
+};
+
+const aLayer = {
+    id: 'myLayer',
+    type: 'circle'
 };
 
 const ApiKey = 'pk.eyJ1IjoiZHNvb2phIiwiYSI6ImNra3dob2dwYjFkbzkycG1zNG55NnZzd2IifQ.ZCGuAjiuGCyjlezqMyn5VA'
@@ -80,9 +63,6 @@ const navStyle = {
         padding: '10px'
     };
 
-    function showCoordinates(e) {
-        console.log(e.lngLat);
-}
 
 export default function Map(props) {
 
@@ -95,7 +75,7 @@ export default function Map(props) {
     });
 
     const mapRef = useRef();
-
+    const layerRef = useRef();
     const geocoderContainerRef = useRef();
 
     return (
@@ -107,15 +87,23 @@ export default function Map(props) {
                 {...style}
                 onViewportChange={viewport => setViewport(viewport)}
                 ref={mapRef}
-                // onInteractionStateChange={e => {
-                //     const features = mapRef.current.queryRenderedFeatures()
-                //     console.log(features.map(f => f.id))}
-                // }
-               
+                onInteractionStateChange={ function() {
+                    let inBounds = [];
+                    let map = mapRef.current.getMap();
+                    let bounds = map.getBounds();
+                    // console.log(bounds)
+                    props.marker.forEach(marker => {
+                        let coordinates = [marker.longitude, marker.latitude]
+                        if (bounds.contains(coordinates)) {
+                            inBounds.push(marker.id)
+                        }
+                    });
+                    console.log(inBounds)
+                }}
             >
-                {/* <Source id="my-data" type="geojson" data={data}>
-                    <Layer {...aLayer} />
-                </Source> */}
+                <Source id="my-data" type="geojson" data={layerSource}>
+                    <Layer ref={layerRef} {...aLayer} />
+                </Source>
 
                 {props.locator === true ?
                     <GeolocateControl
