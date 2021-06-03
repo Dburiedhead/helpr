@@ -20,9 +20,10 @@ class RequestForm extends Component {
   constructor(props) {
     super()
     this.state = {
-      description: '',
-      title: '',
-      request_type: '',
+      id: props.id,
+      description: props.description,
+      title: props.title,
+      request_type: props.request_type,
       latitude: props.latitude,
       longitude: props.longitude
     }
@@ -32,9 +33,8 @@ class RequestForm extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = () => {
-    // setAxiosHeaders();
-      const csrfToken = document.querySelector('[name=csrf-token]').content
-      axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+    const csrfToken = document.querySelector('[name=csrf-token]').content
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
     const data = {
       description: this.state.description,
       title: this.state.title,
@@ -43,15 +43,12 @@ class RequestForm extends Component {
       longitude: this.props.longitude
     };
     console.log(data)
-    axios.post('api/v1/requests', data)
-        .then(res => {
-            if (res.request.status === 201) {
-                alert('Request sent ! Thank you for your participation');
-                this.areaForm.reset();
-            }
-        }
-        )
-        .catch(err => console.log(err))
+    axios.delete(`/api/v1/requests/${this.state.id}`).then(res => {
+      console.log('Activity deleted', res)
+    }, window.location.reload())
+    .catch(error => {
+      console.log(error);
+    });
   };
 
   render() {

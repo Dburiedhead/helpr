@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,10 +8,55 @@ import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Image from 'react-bootstrap/Image';
+import Modal from 'react-bootstrap/Modal';
 import Map from './Map';
 import ResponseForm from './ResponseForm';
+import EditRequest from './EditRequest';
 import axios from 'axios';
 
+function handleDeleteRequest(id) {
+    console.log(id, 'deleted')
+    setAxiosHeaders()
+    axios.delete(`/api/v1/requests/${id}`).then(res => {
+      console.log('Activity deleted', res)
+    }, window.location.reload())
+      .catch(error => {
+        console.log(error);
+      });
+}
+
+function EditActivityModal(req) {
+    const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+    return (
+      <>
+        <Button variant="secondary" onClick={() => handleShow(req)}>Edit</Button>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Edit activity</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditRequest
+                id = {req.id}
+                description= {req.description}
+                title= {req.title}
+                request_type= {req.request_type}
+                latitude= {req.latitude}
+                longitude= {req.longitude}
+            />
+          </Modal.Body>
+        </Modal>
+      </>
+    );
+}
 
 class Request extends Component {
     
@@ -19,7 +64,8 @@ class Request extends Component {
         super();
         this.state = {
             request: [],
-            responses: []
+            responses: [],
+            current_user_request: []
         }
     }
     
@@ -33,6 +79,13 @@ class Request extends Component {
             console.log(error);
         });
 
+        axios.get(`/api/v1/current_user_request`).then(res => {
+            let current_user_request = res.data
+            this.setState({ current_user_request })
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
     
     render() {
@@ -67,24 +120,32 @@ class Request extends Component {
                                 </Row>
                             </Card.Body>
                         </Card>
-                        <Container>
-                            <p>{this.state.request.description}</p>
-                            {/* <Button variant="primary" style={{ margin: '0.5em 0' }}>Help them</Button> */}
-                            <Accordion>
-                                <Card border="light">
-                                    <Card.Header style={{ backgroundColor: "#ffffff" }}>
-                                    <Accordion.Toggle as={Button} variant="primary" eventKey="0">
-                                    Help them
-                                    </Accordion.Toggle>
-                                    </Card.Header>
-                                    <Accordion.Collapse eventKey="0">
-                                    <Card.Body>
-                                            { this.state.request.id && this.state.request.user_id && <ResponseForm request_id={this.state.request.id} user_id={this.state.request.user_id} />}
-                                    </Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                                </Accordion>
-                        </Container>
+                        { this.state.current_user_request && this.state.current_user_request.some(curr_user_req => curr_user_req.user_id === this.state.request.user_id) ?
+                            <div>
+                                <EditActivityModal key={this.state.current_user_request.id} id={this.state.current_user_request.id} />
+                                <Button variant='danger' onClick={() => handleDeleteRequest(this.state.request.id)}>
+                                    Delete
+                                </Button>
+                            </div>
+                        :
+                            <Container>
+                                <p>{this.state.request.description}</p>
+                                <Accordion>
+                                    <Card border="light">
+                                        <Card.Header style={{ backgroundColor: "#ffffff" }}>
+                                        <Accordion.Toggle as={Button} variant="primary" eventKey="0">
+                                        Help them
+                                        </Accordion.Toggle>
+                                        </Card.Header>
+                                        <Accordion.Collapse eventKey="0">
+                                        <Card.Body>
+                                                { this.state.request.id && this.state.request.user_id && <ResponseForm request_id={this.state.request.id} user_id={this.state.request.user_id} />}
+                                        </Card.Body>
+                                        </Accordion.Collapse>
+                                    </Card>
+                                    </Accordion>
+                            </Container>
+                        }
                     </Col>
                 </Row>
             </Container>

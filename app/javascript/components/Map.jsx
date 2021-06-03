@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
+// eslint-disable-next-line import/no-webpack-loader-syntax
 import MapGL, { Popup, NavigationControl, ScaleControl, GeolocateControl, Layer, Source } from 'react-map-gl'
 // eslint-disable-next-line import/no-webpack-loader-syntax
-// import mapboxgl from "!mapbox-gl";
 import Geocoder from "react-map-gl-geocoder";
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
 import Markers from './Markers';
 
 function setFeatures() {
@@ -64,7 +63,7 @@ const navStyle = {
     };
 
 
-export default function Map(props) {
+export default function Map(props, { parentCallback }) {
 
     const [popupInfo, setPopupInfo] = useState(null);
 
@@ -87,19 +86,23 @@ export default function Map(props) {
                 {...style}
                 onViewportChange={viewport => setViewport(viewport)}
                 ref={mapRef}
-                onInteractionStateChange={ function() {
-                    let inBounds = [];
-                    let map = mapRef.current.getMap();
-                    let bounds = map.getBounds();
-                    // console.log(bounds)
-                    props.marker.forEach(marker => {
-                        let coordinates = [marker.longitude, marker.latitude]
-                        if (bounds.contains(coordinates)) {
-                            inBounds.push(marker.id)
+                onInteractionStateChange= {props.show_results === true ?
+                        function() {
+                            let inBounds = [];
+                            let map = mapRef.current.getMap();
+                            let bounds = map.getBounds();
+                            // console.log(bounds)
+                            props.marker.forEach(marker => {
+                                let coordinates = [marker.longitude, marker.latitude]
+                                if (bounds.contains(coordinates)) {
+                                    inBounds.push(marker)
+                                }
+                            });
+                            // console.log(inBounds);
+                            props.parentCallback(inBounds)
                         }
-                    });
-                    console.log(inBounds)
-                }}
+
+                    : console.log('no interaction with the results is required by the parent component')}
             >
                 <Source id="my-data" type="geojson" data={layerSource}>
                     <Layer ref={layerRef} {...aLayer} />
