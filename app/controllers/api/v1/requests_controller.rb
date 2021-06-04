@@ -18,7 +18,6 @@ class Api::V1::RequestsController < ApplicationController
         # ? in the parameter replaced by the current_user.id
         @user_request = Request.where("user_id = ?", current_user.id)
         render json: @user_request
-        puts current_user.id.class
       end
     
       # GET /requests
@@ -65,24 +64,24 @@ class Api::V1::RequestsController < ApplicationController
         end
         
     private
+      def set_request
+          @request = Request.find(params[:id])
+      end
+      
+      def request_params
+          # params.require(:request).permit(:title, :description, :latitude, :longitude, :request_type)
+          params.permit(:title, :description, :latitude, :longitude, :request_type)
+      end
 
-        def set_request
-            @request = Request.find(params[:id])
+      def authorized?
+        @request.user == current_user
+      end   
+      
+      def handle_unauthorized
+        unless authorized?
+          respond_to do
+            render json: { error: "You are not authorized to perform this action.", status: 401 }, status: 401
+          end
         end
-        
-        def request_params
-            params.require(:request).permit(:title, :description, :latitude, :longitude, :request_type)
-        end
-
-        def authorized?
-            @request.user == current_user
-        end   
-        
-        def handle_unauthorized
-            unless authorized?
-                respond_to do |format|
-                    render json.error "You are not authorized to perform this action.", status: 401
-                end
-            end
-        end
+      end
 end

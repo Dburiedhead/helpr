@@ -25,7 +25,7 @@ function handleDeleteRequest(id) {
       });
 }
 
-function EditActivityModal(req) {
+function EditRequestModal(req) {
     const [show, setShow] = useState(false);
   
     const handleClose = () => setShow(false);
@@ -41,7 +41,7 @@ function EditActivityModal(req) {
           keyboard={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Edit activity</Modal.Title>
+            <Modal.Title>Edit Request</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <EditRequest
@@ -122,7 +122,15 @@ class Request extends Component {
                         </Card>
                         { this.state.current_user_request && this.state.current_user_request.some(curr_user_req => curr_user_req.user_id === this.state.request.user_id) ?
                             <div>
-                                <EditActivityModal key={this.state.current_user_request.id} id={this.state.current_user_request.id} />
+                                <EditRequestModal
+                                    key={this.state.request.id}
+                                    id={this.state.request.id}
+                                    description= {this.state.request.description}
+                                    title= {this.state.request.title}
+                                    request_type= {this.state.request.request_type}
+                                    latitude= {this.state.request.latitude}
+                                    longitude= {this.state.request.longitude}
+                                />
                                 <Button variant='danger' onClick={() => handleDeleteRequest(this.state.request.id)}>
                                     Delete
                                 </Button>

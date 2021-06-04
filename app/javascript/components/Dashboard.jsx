@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import setAxiosHeaders from './AxiosHeaders';
 import { Link } from 'react-router-dom';
-
+import EditRequest from './EditRequest';
 
 function handleDeleteRequest(id) {
     console.log(id, 'deleted')
@@ -20,15 +21,37 @@ function handleDeleteRequest(id) {
       });
 }
 
-function handleEditRequest(id) {
-    console.log(id, 'edit request func to be finished')
-    // setAxiosHeaders()
-    // axios.patch(`/api/v1/request/${id}`).then(res => {
-    //   console.log('Activity deleted', res)
-    // }, window.location.reload())
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+function EditRequestModal(req) {
+    const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+    return (
+      <>
+        <Button variant="secondary" onClick={() => handleShow(req)}>Edit</Button>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Request</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditRequest
+                id = {req.id}
+                description= {req.description}
+                title= {req.title}
+                request_type= {req.request_type}
+                latitude= {req.latitude}
+                longitude= {req.longitude}
+            />
+          </Modal.Body>
+        </Modal>
+      </>
+    );
 }
 
 function handleDeleteResponse(id) {
@@ -114,6 +137,8 @@ class Dashboard extends Component {
                                             created_at,
                                             description,
                                             fulfilled,
+                                            latitude,
+                                            longitude,
                                             updated_at,
                                         }, index) =>
                                         <tr key={index}>
@@ -125,7 +150,15 @@ class Dashboard extends Component {
                                             <td>{updated_at !== created_at? new Date(updated_at).toLocaleDateString() : 'The request haven\'t been updated'}</td>
                                             <td><a href={`/request/${id}`}>See request page</a></td>
                                             <td>
-                                                <Button variant="link" onClick={() => handleEditRequest(id)}>Edit</Button>
+                                                <EditRequestModal
+                                                    key={id}
+                                                    id={id}
+                                                    description= {description}
+                                                    title= {title}
+                                                    request_type= {request_type}
+                                                    latitude= {latitude}
+                                                    longitude= {longitude}
+                                                />
                                             </td>
                                             <td>
                                                 Ask for validation + Delete only after a messaeg is sent to helprzs' messenger <br/>

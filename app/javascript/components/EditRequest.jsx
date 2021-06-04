@@ -15,7 +15,7 @@ const selectOptions = [
   { value: 'material', text: 'Material' },
 ];
 
-class RequestForm extends Component {
+class EditRequest extends Component {
 
   constructor(props) {
     super()
@@ -36,6 +36,7 @@ class RequestForm extends Component {
     const csrfToken = document.querySelector('[name=csrf-token]').content
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
     const data = {
+      id: this.state.id,
       description: this.state.description,
       title: this.state.title,
       request_type: this.state.request_type,
@@ -43,9 +44,10 @@ class RequestForm extends Component {
       longitude: this.props.longitude
     };
     console.log(data)
-    axios.delete(`/api/v1/requests/${this.state.id}`).then(res => {
-      console.log('Activity deleted', res)
-    }, window.location.reload())
+    axios.put(`/api/v1/requests/${this.state.id}`, data).then(res => {
+      console.log('Request edited', res)
+      // if (res.status == 200){window.location.reload()}
+    })
     .catch(error => {
       console.log(error);
     });
@@ -64,7 +66,7 @@ class RequestForm extends Component {
           // onSubmit={this.handleSubmit}
           className="custom-classname-is-rendered"
           ref={(event) => { this.areaForm = event; }}
-          onValidSubmit={this.handleSubmit}
+          onValidSubmit={this.handleSubmit.bind(this)}
         >
           <Form.Group>
             <Form.Input
@@ -146,4 +148,4 @@ class RequestForm extends Component {
   }
 }
 
-export default RequestForm;
+export default EditRequest;
