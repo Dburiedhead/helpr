@@ -2,17 +2,24 @@ class Api::V1::ResponsesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_response, only: [:show, :edit, :update, :destroy]
   # before_action :current_request
-
+  
   def index
     @responses = Response.all
     # @responses = current_user.responses.all
-
+    
     render json: @responses
   end
   
   # GET /responses
   def show
     render json: @response
+  end
+  
+  # ? in the parameter replaced by the current_user.id
+  def get_response_by_user_id
+    # puts "CURRENT USER IS WATCHING :: #{@response.user = current_user?}"
+    @user_response = Response.where("user_id = ?", current_user.id)
+    render json: @user_response
   end
 
   # POST /responses
@@ -34,15 +41,15 @@ class Api::V1::ResponsesController < ApplicationController
       end
     end
   end
-  if authorized?
-    if @response.save
-      render json: @response , status: :created, location: api_v1_response_url(@response)
-    else
-      render json: @response.errors, status: :unprocessable_entity
-    end
-  else
-    handle_unauthorized
-  end
+  # if authorized?
+  #   if @response.save
+  #     render json: @response , status: :created, location: api_v1_response_url(@response)
+  #   else
+  #     render json: @response.errors, status: :unprocessable_entity
+  #   end
+  # else
+  #   handle_unauthorized
+  # end
 
   def update
     # @response = current_user.responses.build(response_params)
@@ -58,10 +65,10 @@ class Api::V1::ResponsesController < ApplicationController
   end
     
   def destroy
+    Request.find(params[:request_id]).update(:response_counter => Request.find(params[:request_id]).response_counter - 1)
     if authorized?
       @response.destroy
         head :no_content
-      Request.find(params[:request_id]).update(:response_counter => Request.find(params[:request_id]).response_counter - 1)
       
     else
       handle_unauthorized

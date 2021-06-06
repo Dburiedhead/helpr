@@ -57,9 +57,12 @@ function EditRequestModal(req) {
 function handleDeleteResponse(id) {
     console.log(id, 'deleted')
     setAxiosHeaders()
-    axios.delete(`/api/v1/response/${id}`).then(res => {
-      console.log('Activity deleted', res)
-    }, window.location.reload())
+    axios.delete(`/api/v1/responses/${id}`).then(res => {
+      console.log('Response deleted', res);
+      if (res.status == 204) {
+        window.location.reload();
+      }
+    })
       .catch(error => {
         console.log(error);
       });
@@ -93,7 +96,7 @@ class Dashboard extends Component {
             .catch(error => {
                 console.log(error);
             });
-        axios.get('/api/v1/responses/').then(res => {
+        axios.get('/api/v1/current_user_response/').then(res => {
             let user_responses = res.data
             this.setState({ user_responses })
         })
@@ -190,6 +193,7 @@ class Dashboard extends Component {
                                 <tbody>
                                     {this.state.user_responses.map((
                                         {
+                                            id,
                                             message,
                                             request_id,
                                             created_at,
@@ -206,10 +210,10 @@ class Dashboard extends Component {
                                             <td>
                                                 <Button variant="link" onClick={() => handleEditResponse(id)}>Edit</Button>
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 Ask for validation + Delete only if setto unfulfilled and sent a notification in requester's messenger <br/>
                                                 <Button variant="link" onClick={() => handleDeleteResponse(id)}>Delete</Button>
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     )}
                                 </tbody>

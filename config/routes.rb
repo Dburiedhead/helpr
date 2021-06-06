@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :responses, only: [:index, :show, :create, :update, :destroy]
       # resources :responses, only: [:create, :destroy]
       get 'current_user_request', to: 'requests#get_request_by_user_id'
+      get 'current_user_response', to: 'responses#get_response_by_user_id'
       # get '/request/:id', to: 'requests#show_request', as: :show_request
     end
     

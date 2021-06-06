@@ -122,7 +122,10 @@ export default function Map(props, { parentCallback }) {
                     <Geocoder mapRef={mapRef} mapboxApiAccessToken={ApiKey} containerRef={geocoderContainerRef} position='bottom-right' />
                     : null
                 }
-                <Markers data={props.marker} onClick={setPopupInfo} />
+                {props.marker ? 
+                    <Markers data={props.marker} onClick={setPopupInfo} />
+                    : null
+                }
 
                 {popupInfo && (
                     <Popup
@@ -137,7 +140,9 @@ export default function Map(props, { parentCallback }) {
                     >
                         <p>{`${popupInfo.title} - ${popupInfo.user_id}`} <br />
                             {`${popupInfo.request_type} - Created ${popupInfo.created_at}`} <br />
-                            {`Go to request page${popupInfo.id} - Fulfill${popupInfo.user_id}`}
+                            {`${popupInfo.description} - location : ${popupInfo.latitude} - ${popupInfo.longitude}`} <br />
+                            {` Status ${popupInfo.fulfilled}`} <br />
+                            {`Go to request page${popupInfo.id} - ${popupInfo.fulfilled == true ? 'Fulfilled' : 'Unfulfilled'}`}
                         </p>
                         <Button href={`/request/${popupInfo.id}`} target="_blank">Fulfill</Button>
                     </Popup>
