@@ -3,8 +3,8 @@ class Api::V1::RequestsController < ApplicationController
   before_action :set_request, only: [:show, :edit, :update, :destroy]
 
   def index
-    # @requests = Request.all
-    @requests = Request.where(:request_status => "opened" || "pending")
+    @requests = Request.all
+    # @requests = Request.where(:request_status => "opened" || "pending")
     render json: @requests
   end
   

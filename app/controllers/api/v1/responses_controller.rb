@@ -29,6 +29,8 @@ class Api::V1::ResponsesController < ApplicationController
     # puts "CURRENT REQUEST is :: #{current_request}"
     # puts "REQUEST counter is :: #{@current_request.find(params[:response_counter])}"
     @response = current_user.responses.build(response_params)
+    @current_request = Request.where(:id => params[:request_id])
+    @conversation = @current_request.Conversation.new(conversation_params)
         # @current_request = Request.find(:id => params[:request_id])
     if Request.find(params[:request_id]).response_counter < 5
       Request.find(params[:request_id]).update(:response_counter => Request.find(params[:request_id]).response_counter + 1, :request_status => Request.find(params[:request_id]).request_status = "pending")
@@ -80,7 +82,9 @@ class Api::V1::ResponsesController < ApplicationController
     # def current_request
     #   @current_request == Request.find(params[:request_id])
     # end
-
+    def conversation_params
+      params.require(:conversation).permit(:title, :request_id)
+    end
     def set_response
       @response = Response.find(params[:id])
     end

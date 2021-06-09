@@ -6,6 +6,4 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-2.times do |i|
-    User.create(email: "user-#{i+1}@example.com", password: "password", password_confirmation: "password")
-end
+Conversation.create(title: 'The second request title', request_id: 2, initial_message: 'Seeding the conversations 2')

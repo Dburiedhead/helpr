@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   has_many :requests
   has_many :responses
+  has_many :messages
   
   def avatar_thumbnail
     if avatar.attached?

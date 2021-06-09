@@ -18,9 +18,11 @@ Rails.application.routes.draw do
       # resources :responses, only: [:create, :destroy]
       get 'current_user_request', to: 'requests#get_request_by_user_id'
       get 'current_user_response', to: 'responses#get_response_by_user_id'
-      # get '/request/:id', to: 'requests#show_request', as: :show_request
+      
+      resources :conversations, only: [:index, :show, :create], param: :id
+      resources :messages, only: [:index, :create]
+      mount ActionCable.server => '/cable'
     end
-    
   end
   get '*path', to: 'pages#index', via: :all
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

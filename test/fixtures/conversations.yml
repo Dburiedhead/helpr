@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  request_id: one
+  requester_id: one
+  helpr_id: one
+
+two:
+  title: MyString
+  request_id: two
+  requester_id: two
+  helpr_id: two
