@@ -88,7 +88,7 @@ class Dashboard extends Component {
 
     constructor() {
         super();
-        setAxiosHeaders();
+        // setAxiosHeaders();
         axios.get('/api/v1/current_user_request/').then(res => {
             let user_requests = res.data
             this.setState({ user_requests })

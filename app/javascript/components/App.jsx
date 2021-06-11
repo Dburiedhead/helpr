@@ -22,7 +22,7 @@ const App = () => {
                 <Route exact path='/dashboard/' component = { Dashboard } />
                 <Route exact path='/profile/' component = { Profile } />
                 <Route exact path='/conversations/' component = { ConversationsList } />
-                <Route exact path='/conversations/conversation/:id' component = { Conversation } />
+                <Route exact path='/conversations/:id' component = { Conversation } />
                 <Route component = { NotFound } />
                 {/* <Route exact path='/' component = { GuestHome } /> */}
             </Switch>

@@ -1,54 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Button from 'react-bootstrap/Button';
 
-
-function displayConversations(conversations) {
-  let usersConversations = null
-  // if (this.props.currentUser) {
-      // usersRooms = this.props.currentUser.attributes.rooms
-  // }
-  return conversations.map( (conv), index => {
-      return (
-      <div key={index}>
-          <h3>{conv.title}</h3>
-          {/* { usersRooms && usersRooms.some( userusersConversationsRoom => usersConversations.id === parseInt(conv.id) ) ? ( */}
-              <Link to={`/conversations/conversation/${conv.id}`}><button>Enter</button></Link>
-          {/* ) : ( */}
-              <Link to={`/conversations/conversation/${conv.id}`}><button id={conv.id} onClick={this.handleSubscribe}>Subscribe</button></Link>
-          {/* ) } */}
-      </div>
-      )
-  })
-};
 
 class ConversationsList extends Component {
   constructor() {
     super()
     this.state = {
       conversations: [],
-      // currentConversation: {
-      //   conversation: {}, 
-      //   users: [],
-      //   messages: []
-      // }
     }
     axios.get('/api/v1/conversations/').then(res => {
       let conversations = res.data
       this.setState({ conversations })
-  })
-  .catch(error => {
-      console.log(error);
-  });
+    })
+      .catch(error => {
+        console.log(error);
+      });
   }
-
+  
   // componentDidMount() {
 
-  // // updateCurrentUser = (data) => {
-  // //   this.setState({
-  // //     currentUser: data
-  // //   })
-  // // }
   // }
 
   handleSubscribe = (event) => {
@@ -57,7 +29,7 @@ class ConversationsList extends Component {
   }
 
   postFirstMessage = (convId) => {
-    window.history.pushState(null, null, `/conversations/${convId}`)
+    window.history.pushState(null, null, `/conversations/${conv.title}/${convId}`)
     const message = {
       // content: `${this.state.currentUser.attributes.username} has joined this room!`,
       // user_id: this.state.currentUser.id,
@@ -67,11 +39,11 @@ class ConversationsList extends Component {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
     axios.post('/api/v1/messages/', message).then(res => {
       if (res.request.status === 201) {
-          alert('Message sent !');
-          this.areaForm.reset();
+        alert('Message sent !');
+        this.areaForm.reset();
       }
-  })
-  .catch(err => console.log(err))
+    })
+      .catch(err => console.log(err))
     // fetch("http://localhost:3000/messages", {
     //     method: "POST",
     //     headers: {
@@ -88,10 +60,23 @@ class ConversationsList extends Component {
 
   render() {
     return (
-        <div>
-            <h1>Current Conversations</h1>
-            {displayConversations(this.state.conversations)}
-        </div>
+      <div>
+        <h1>Current Conversations</h1>
+        {/* { this.state.conversations.length > 0 ? */}
+          {this.state.conversations.map(({title, id}, index) => 
+            <div key={index}>
+              <h3>{title}</h3>
+              {/* { usersRooms && usersRooms.some( userusersConversationsRoom => usersConversations.id === parseInt(conv.id) ) ? ( */}
+              <Link to={`/conversations/${id}`}><Button variant='primary'>Enter</Button></Link>
+              {/* ) : ( */}
+              {/* <Link to={`/conversations/conversation/${conv.id}`}><button id={conv.id} onClick={this.handleSubscribe}>Subscribe</button></Link> */}
+              {/* ) } */}
+            </div>
+          )}
+          {/* :
+          <h3>You don't have any conversation</h3>
+        } */}
+      </div>
     )
   }
 }

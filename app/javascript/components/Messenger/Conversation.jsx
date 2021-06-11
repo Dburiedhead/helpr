@@ -3,36 +3,78 @@ import ChatFeed from './ChatFeed';
 import RoomWebSocket from './RoomWebSocket';
 import axios from 'axios';
 import ActionCable from 'actioncable'
+import setAxiosHeaders from '../AxiosHeaders';
 
 const cableApp = {}
 cableApp.cable = ActionCable.createConsumer("ws://localhost:3000/cable")
 
-class Conversation extends Component {
-    constructor() {
-        super()
-        this.state = {
-            newMessage: '',
-            currentConversation: {},
-            conv_id: null
-        }
-    }
-    
-    componentDidMount() {
 
-        // getRoomData()
-        const conv_id = this.props.match.params.id
-        this.setState({conv_id})
-        axios.get(`/api/v1/conversations/${conv_id}`)
+class Conversation extends Component {
+
+    getRoomData = (id) => {
+        axios.get(`api/v1/conversations/${id}`)
             // .then(response => response.json())
             .then(res => {
                 this.setState({
                     currentConversation: {
                         room: res.data,
-                        users: res.data.attributes.users,
-                        messages: res.data.attributes.messages
+                        users: res.data.users,
+                        messages: res.data.messages
                     }
                 })
             })
+    }
+    
+    updateAppStateRoom = (newRoom) => {
+        this.setState({
+            currentConversation: {
+                room: newRoom.room.data,
+                users: newRoom.users,
+                messages: newRoom.messages
+            }
+        })
+      }
+
+    constructor() {
+        super()
+        this.state = {
+            newMessage: '',
+            currentConversation: {},
+            conversation:{},
+            conv_id: null
+        }
+    }
+    
+    componentDidMount() {
+        const conv_id = this.props.match.params.id
+        this.setState({conv_id})
+
+        axios.get(`/api/v1/conversations/${conv_id}`)
+        .then(res => {
+            let conversation = {}
+            let users_ids =[]
+            users_ids.push(res.data.helpr_id, res.data.requester_id)
+            this.setState({ conversation,
+                currentConversation: {
+                    room: res.data.id,
+                    users: users_ids,
+                    messages: res.data.messages
+                }
+            })
+        })
+
+        this.getRoomData(conv_id)
+        
+        cableApp.conversation = cableApp.cable.subscriptions.create({
+            channel: 'ConversationsChannel',
+            conversations: conv_id
+        }, 
+        {
+            received: (updatedConversation) => {
+                this.updateAppStateRoom(updatedConversation)
+            }
+        })
+        
     }
     // displayUsers = (users) => {
     //     return users.map( user => {
@@ -53,33 +95,34 @@ class Conversation extends Component {
             newMessage: ''
         })
 
-        const message = {
-            content: this.state.newMessage,
+        const data = {
+            text: this.state.newMessage,
             // user_id: this.props.currentUser.id,
-            room_id: this.state.currentConversation.conversation.id
+            conversation_id: this.state.conversation.id
         }
+        setAxiosHeaders()
 
-        axios.post("api/v1/messages", message)
+        axios.post("/api/v1/messages", data)
         // .then(resp => resp.json())
-        // .then(result => {
-        //     let messageDiv = document.getElementById('messages')
-        //     messageDiv.scrollTop = messageDiv.scrollHeight
-        // })
+        .then(result => {
+            let messageDiv = document.getElementById('messages')
+            messageDiv.scrollTop = messageDiv.scrollHeight
+        })
     }
 
     render() {
         return (
             <div>
-                { this.state.currentConversation.conversation ? (
+                { this.state.conversation ? (
                     <div id='conversation-show'>
-                        <h1 id='conversation-header'>Welcome to the {this.state.currentConversation.conversation.attributes.title} conversation!</h1>
+                        <h1 id='conversation-header'>Welcome to the {this.state.conversation.title} conversation!</h1>
                         <div id='conversation-sidebar'>
-                            <h3>Fellow {this.state.currentConversation.conversation.attributes.name}</h3>
+                            <h3>Fellow {this.state.conversation.title}</h3>
                             {/* <ul id='users-list'>
                                 {this.displayUsers(this.props.roomData.conversation.attributes.users.data)}
                             </ul> */}
                         </div>
-                        <ChatFeed conversation={this.state.currentConversation.conversation} />
+                        <ChatFeed conversation={this.state.conversation}/>
                         <form id='chat-form' onSubmit={this.submitMessage}>
                             <h3>Post a new message:</h3>
                             <textarea type='text' value={this.state.newMessage} onChange={this.handleMessageInput}></textarea>
@@ -89,14 +132,14 @@ class Conversation extends Component {
                     </div>
                 ) : null}
 
-                <RoomWebSocket
+                {/* <RoomWebSocket
                     cableApp={cableApp}
                     // updateApp={updateAppStateRoom}
                     // getRoomData={
                     //     getRoomData
                     // }
-                    roomData={this.state.currentConversation}
-                />
+                    roomData={this.state.conversation}
+                /> */}
             </div>
         )
     }

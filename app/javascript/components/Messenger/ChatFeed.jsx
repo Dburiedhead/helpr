@@ -15,8 +15,8 @@ class ChatFeed extends Component {
     }
 
     // whichAvatar = (message) => {
-    //     const user = this.props.conversation.attributes.users.data.find(user => parseInt(user.id) === message.user_id )
-    //     return user.attributes.avatar_url
+    //     const user = this.props.conversation.users.data.find(user => parseInt(user.id) === message.user_id )
+    //     return user.avatar_url
     // }
 
     render() {
@@ -24,8 +24,8 @@ class ChatFeed extends Component {
             <div id='chat-feed'>
                 <h3>Chat Feed:</h3>
                 <div id='messages'>
-                    { this.props.conversation.attributes.messages ? (
-                        this.displayMessages(this.props.conversation.attributes.messages)
+                    { this.props.conversation.messages ? (
+                        this.displayMessages(this.props.conversation.messages)
                     ) : (
                         <h3>This conversation has no messages yet - be the first to post!</h3>
                     ) }

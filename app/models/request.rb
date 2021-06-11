@@ -1,6 +1,6 @@
 class Request < ApplicationRecord
     belongs_to :user
-    has_many :responses
+    has_many :conversations
 
     validates :title, presence: true
     validates :description, presence: true, length: {maximum: 300}

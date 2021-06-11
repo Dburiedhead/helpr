@@ -14,13 +14,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       # resources :requests, only: [:index, :show, :create, :update, :destroy]
       resources :requests, param: :id
-      resources :responses, only: [:index, :show, :create, :update, :destroy]
+      # resources :responses, only: [:index, :show, :create, :update, :destroy]
       # resources :responses, only: [:create, :destroy]
       get 'current_user_request', to: 'requests#get_request_by_user_id'
       get 'current_user_response', to: 'responses#get_response_by_user_id'
       
-      resources :conversations, only: [:index, :show, :create], param: :id
-      resources :messages, only: [:index, :create]
+      resources :conversations, only: [:index, :show, :create, :destroy], param: :id
+      resources :messages, only: [:index, :show, :create]
       mount ActionCable.server => '/cable'
     end
   end

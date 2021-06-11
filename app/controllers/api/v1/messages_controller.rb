@@ -1,13 +1,18 @@
 class Api::V1::MessagesController < ApplicationController
-    def index
-        @messages = message.all
-        render json: messages
-    end
+    before_action :authenticate_user!
+    # before_action :set_message, only: [:show, :create]
 
+    def index
+        @messages = Message.all
+        render json: @messages
+    end
+    
     def create
-        @message = current_user.messages.new(message_params)
-        conversation = Conversation.find(params[:conversation_id])
-        if message.save
+        puts "CURRENT USER IS :: #{current_user}"
+        @message = current_user.messages.build(message_params)
+        puts "CONVERSATION ID IS :: #{Conversation.find(message_params[:conversation_id])}"
+        conversation = Conversation.find(message_params[:conversation_id])
+        if @message.save
             puts "successfully saved a message!"
             ConversationsChannel.broadcast_to(conversation, {
                 conversation: ConversationSerializer.new(conversation),
@@ -19,7 +24,10 @@ class Api::V1::MessagesController < ApplicationController
     end
 
     private
+        # def set_message
+        #     @message = Message.find(params[:id])
+        # end
         def message_params
-            params.require(:message).permit(:content, :user_id, :conversation_id)
+            params.require(:message).permit(:text, :conversation_id)
         end
 end

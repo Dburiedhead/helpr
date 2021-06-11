@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_08_162633) do
+ActiveRecord::Schema.define(version: 2021_06_11_100356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,12 +37,16 @@ ActiveRecord::Schema.define(version: 2021_06_08_162633) do
   end
 
   create_table "conversations", force: :cascade do |t|
-    t.string "title"
-    t.bigint "request_id", null: false
+    t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "initial_message"
+    t.bigint "helpr_id", null: false
+    t.bigint "requester_id", null: false
+    t.boolean "selected", default: false, null: false
+    t.bigint "request_id", null: false
+    t.index ["helpr_id"], name: "index_conversations_on_helpr_id"
     t.index ["request_id"], name: "index_conversations_on_request_id"
+    t.index ["requester_id"], name: "index_conversations_on_requester_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -50,7 +54,9 @@ ActiveRecord::Schema.define(version: 2021_06_08_162633) do
     t.bigint "conversation_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "requests", force: :cascade do |t|
@@ -95,7 +101,10 @@ ActiveRecord::Schema.define(version: 2021_06_08_162633) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "conversations", "requests"
+  add_foreign_key "conversations", "users", column: "helpr_id"
+  add_foreign_key "conversations", "users", column: "requester_id"
   add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users"
   add_foreign_key "requests", "users"
   add_foreign_key "responses", "requests"
   add_foreign_key "responses", "users"

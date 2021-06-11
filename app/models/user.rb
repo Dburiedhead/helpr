@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  has_many :requests
+  has_many :conversations, through: :messages
+  has_many :messages
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -7,9 +10,6 @@ class User < ApplicationRecord
   has_one_attached :avatar
   after_commit :add_default_avatar, on: %i[create update]
 
-  has_many :requests
-  has_many :responses
-  has_many :messages
   
   def avatar_thumbnail
     if avatar.attached?

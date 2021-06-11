@@ -13,13 +13,14 @@ class ResponseForm extends Component {
     state = {
         message: '',
         request_id: '',
+        request_data: ''
     }
 
     constructor(props) {
         super();
         axios.get(`/api/v1/requests/${props.request_id}`).then(res => {
-            let user_requests = res.data
-            this.setState({ user_requests })
+            let request_data = res.data
+            this.setState({ request_data })
         })
             .catch(error => {
                 console.log(error);
@@ -31,13 +32,16 @@ class ResponseForm extends Component {
         const csrfToken = document.querySelector('[name=csrf-token]').content
       axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
         const data = {
-            message: this.state.message,
+            // message: this.state.message,
+            title: this.state.request_data.title,
+            requester_id: this.state.request_data.user_id,
             request_id: this.props.request_id
         };
-        console.log(data)
-        axios.post('/api/v1/responses', data)
+        // console.log(data)
+        axios.post('/api/v1/conversations', data)
             .then(res => {
-                if (res.response.status === 201) {
+                console.log(res)
+                if (res.status === 201) {
                     alert('Response sent ! Thank you for your help');
                     this.areaForm.reset();
                 }
