@@ -6,19 +6,13 @@ Rails.application.routes.draw do
   
   devise_scope :user do
     root to: 'devise/sessions#new'
-    # root 'pages#ghome'
-    # get '*path', to: 'pages#ghome', via: :all
   end
   
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      # resources :requests, only: [:index, :show, :create, :update, :destroy]
       resources :requests, param: :id
-      # resources :responses, only: [:index, :show, :create, :update, :destroy]
-      # resources :responses, only: [:create, :destroy]
       get 'current_user_request', to: 'requests#get_request_by_user_id'
-      get 'current_user_response', to: 'responses#get_response_by_user_id'
-      
+      get 'unfulfilled_request', to: 'request#unfulfilled_request'
       resources :conversations, only: [:index, :show, :create, :destroy], param: :id
       resources :messages, only: [:index, :show, :create]
       mount ActionCable.server => '/cable'

@@ -1,86 +1,78 @@
 import React, { Component } from 'react';
-import ChatFeed from './ChatFeed';
-import RoomWebSocket from './RoomWebSocket';
+import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 import ActionCable from 'actioncable'
 import setAxiosHeaders from '../AxiosHeaders';
+import WebSocket from './WebSocket'
 
 const cableApp = {}
-cableApp.cable = ActionCable.createConsumer("ws://localhost:3000/cable")
-
+cableApp.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
 
 class Conversation extends Component {
-
-    getRoomData = (id) => {
-        axios.get(`api/v1/conversations/${id}`)
-            // .then(response => response.json())
-            .then(res => {
-                this.setState({
-                    currentConversation: {
-                        room: res.data,
-                        users: res.data.users,
-                        messages: res.data.messages
-                    }
-                })
-            })
-    }
-    
-    updateAppStateRoom = (newRoom) => {
-        this.setState({
-            currentConversation: {
-                room: newRoom.room.data,
-                users: newRoom.users,
-                messages: newRoom.messages
-            }
-        })
-      }
-
-    constructor() {
+    constructor(props) {
         super()
         this.state = {
             newMessage: '',
             currentConversation: {},
-            conversation:{},
-            conv_id: null
+            conversation: {},
+            isConversationLoaded: false,
         }
+        axios.get(`/api/v1/conversations/${props.match.params.id}`).then(res => {
+            console.log('get conversation')
+            let conversation = res.data
+            this.setState({ conversation, isConversationLoaded: true})
+          })
+            .catch(error => {
+              console.log(error);
+            });
+        // axios.get(`/api/v1/conversations/${props.match.params.id}`)
+        //     .then(res => {
+        //         console.log('getting conv data')
+        //         let conversation = res.data
+        //         let users_ids = []
+        //         users_ids.push(res.data.helpr_id, res.data.requester_id)
+        //         this.setState({
+        //             conversation,
+        //             // currentConversation: {
+        //             //     conversation_id: res.data.id,
+        //             //     users: users_ids,
+        //             //     messages: res.data.messages
+        //             // },
+        //             isConversationLoaded: true
+        //         })
+        //     })
     }
-    
-    componentDidMount() {
-        const conv_id = this.props.match.params.id
-        this.setState({conv_id})
 
-        axios.get(`/api/v1/conversations/${conv_id}`)
-        .then(res => {
-            let conversation = {}
-            let users_ids =[]
-            users_ids.push(res.data.helpr_id, res.data.requester_id)
-            this.setState({ conversation,
-                currentConversation: {
-                    room: res.data.id,
-                    users: users_ids,
-                    messages: res.data.messages
-                }
+    getData = (id) => {
+
+        axios.get(`/api/v1/conversations/${id}`)
+            .then(res => {
+                console.log('getting conv data')
+                // let conversation = res.data
+                let users_ids = []
+                users_ids.push(res.data.helpr_id, res.data.requester_id)
+                this.setState({
+                    // conversation,
+                    currentConversation: {
+                        conversation_id: res.data.id,
+                        users: users_ids,
+                        messages: res.data.messages
+                    },
+                    isConversationLoaded: true
+                })
             })
-        })
+    }
 
-        this.getRoomData(conv_id)
-        
-        cableApp.conversation = cableApp.cable.subscriptions.create({
-            channel: 'ConversationsChannel',
-            conversations: conv_id
-        }, 
-        {
-            received: (updatedConversation) => {
-                this.updateAppStateRoom(updatedConversation)
+    updateConvData = (newConv) => {
+        console.log('updating conv data')
+        this.setState({
+            currentConversation: {
+                conversation_id: newConv.id,
+                users: newConv.users,
+                messages: newConv.messages
             }
         })
-        
     }
-    // displayUsers = (users) => {
-    //     return users.map( user => {
-    //         return <li key={user.id}><img src={`http://localhost:3000/${user.attributes.avatar_url}`} alt={`avatar for ${user.attributes.username}`}/>{user.attributes.username}</li>
-    //     })
-    // }
 
     handleMessageInput = (event) => {
         this.setState({
@@ -97,17 +89,16 @@ class Conversation extends Component {
 
         const data = {
             text: this.state.newMessage,
-            // user_id: this.props.currentUser.id,
             conversation_id: this.state.conversation.id
         }
         setAxiosHeaders()
 
         axios.post("/api/v1/messages", data)
-        // .then(resp => resp.json())
-        .then(result => {
-            let messageDiv = document.getElementById('messages')
-            messageDiv.scrollTop = messageDiv.scrollHeight
-        })
+            // .then(resp => resp.json())
+            .then(result => {
+                let messageDiv = document.getElementById('messages')
+                messageDiv.scrollTop = messageDiv.scrollHeight
+            })
     }
 
     render() {
@@ -122,7 +113,22 @@ class Conversation extends Component {
                                 {this.displayUsers(this.props.roomData.conversation.attributes.users.data)}
                             </ul> */}
                         </div>
-                        <ChatFeed conversation={this.state.conversation}/>
+                        {/* <ChatFeed conversation={this.state.conversation} /> */}
+                        <div id='chat-feed'>
+                            <h3>Chat Feed:</h3>
+                            <div id='messages'>
+                                { this.state.isConversationLoaded ? <ListGroup variant='flush'>
+                                    {/* {this.state.conversation.messages ?  */}
+                                        {this.state.conversation.messages.map(({id, text, user_id, created_at}, index) => {
+                                            // const avatar = this.whichAvatar(message)
+                                            <ListGroup.Item key={index}>{text} - {user_id} - {new Date (`${created_at}`).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} </ListGroup.Item>
+                                        })}
+                                     {/* : 
+                                        <h3>This conversation has no messages yet - be the first to post!</h3>
+                                    } */}
+                                </ListGroup> : <p>No messages yet</p>}
+                            </div>
+                        </div>
                         <form id='chat-form' onSubmit={this.submitMessage}>
                             <h3>Post a new message:</h3>
                             <textarea type='text' value={this.state.newMessage} onChange={this.handleMessageInput}></textarea>
@@ -131,15 +137,18 @@ class Conversation extends Component {
                         </form>
                     </div>
                 ) : null}
+                {
+                    this.state.isConversationLoaded ?
+                        <WebSocket
+                            cableApp={cableApp}
+                            updateApp={this.updateConvData}
+                            getRoomData={this.getData}
+                            // roomData={this.state.currentConversation}
+                            roomData={this.state.currentConversation}
+                        />
+                        : null
 
-                {/* <RoomWebSocket
-                    cableApp={cableApp}
-                    // updateApp={updateAppStateRoom}
-                    // getRoomData={
-                    //     getRoomData
-                    // }
-                    roomData={this.state.conversation}
-                /> */}
+                }
             </div>
         )
     }

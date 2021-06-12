@@ -61,7 +61,7 @@ class ConversationsList extends Component {
   render() {
     return (
       <div>
-        <h1>Current Conversations</h1>
+        <h1>Conversations</h1>
         {/* { this.state.conversations.length > 0 ? */}
           {this.state.conversations.map(({title, id}, index) => 
             <div key={index}>

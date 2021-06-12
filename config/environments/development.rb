@@ -65,5 +65,6 @@ Rails.application.configure do
 
   config.serve_static_assets = false
   config.assets.precompile += %w( *.js *.jsx )
+  # config.actionn_cable.mount_path = "/cable"
   
 end

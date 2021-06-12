@@ -3,7 +3,7 @@ class Api::V1::RequestsController < ApplicationController
   before_action :set_request, only: [:show, :edit, :update, :destroy]
 
   def index
-    @requests = Request.all
+    @requests = Request.where.not("user_id = ?", current_user.id)
     # @requests = Request.where(:request_status => "opened" || "pending")
     render json: @requests
   end
@@ -18,13 +18,18 @@ class Api::V1::RequestsController < ApplicationController
     render json: @user_request
   end
 
+  def get_unfulfilled_request
+    @unfulfilled_request = Request.where("request_status = ?", "unfulfilled")
+    render json: @unfulfilled_request
+  end
+
   def show
     render json: @request
   end
 
   def create
     @request = current_user.requests.build(request_params)
-
+    puts "REQUEST PARAMS :: #{request_params}"
     if authorized?
       if @request.save
         render json: @request , status: :created, location: api_v1_request_url(@request)

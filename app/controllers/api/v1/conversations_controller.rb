@@ -3,8 +3,7 @@ class Api::V1::ConversationsController < ApplicationController
     before_action :set_conversation, only: [:show, :destroy]
 
     def index
-        @conversations = Conversation.all
-        # @conversations = Conversation.where("requester_id = ?", current_user.id) || Conversation.where("helpr_id = ?", current_user.id)      
+        @conversations = Conversation.where("helpr_id = #{current_user.id} OR requester_id = #{current_user.id}")
         render json: @conversations
     end
 
@@ -22,23 +21,15 @@ class Api::V1::ConversationsController < ApplicationController
 
     def create
         
-        # conversation_params[:title] = Request.find(params[:request_id]).title
-        # conversation_params[:requester_id] = Request.find(params[:request_id]).user_id
         conversation_params[:helpr_id] = current_user.id
         counter = Request.find(params[:request_id]).response_counter
-        puts "PARAMS ARE :: #{conversation_params}"
-        puts "REQUESTER is :: #{conversation_params[:requester_id]}"
-        # puts "REQUEST is :: #{Request.where(:id => params[:request_id])}"
-        # puts "COUNTER is :: #{counter}"
-        # @conversation = Request.where(:id => params[:request_id]).conversations.new(conversation_params)
-        # @conversation = Conversation.create(conversation_params)
         @conversation = Conversation.new(title: conversation_params[:title], requester_id: conversation_params[:requester_id], request_id: conversation_params[:request_id], helpr_id: current_user.id)
         # @conversation = current_user.conversations.build(conversation_params)
-        # if @conversation.save
-        #     serialized_data = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
-        #     ActionCable.server.broadcast 'conversations_channel', serialized_data
-        #     head :ok
-        # end
+        if @conversation.save
+            serialized_data = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
+            ActionCable.server.broadcast 'conversations_channel', serialized_data
+            head :ok
+        end
     end
 
     # def create
