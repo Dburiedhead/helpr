@@ -8,46 +8,51 @@ import WebSocket from './WebSocket'
 const cableApp = {}
 cableApp.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
 
-// class RoomWebSocket extends Component {
-//     componentDidMount() {
-//         this.props.getRoomData(window.location.href.match(/\d+$/)[0])
-//         console.log('cableAppp', this.props.cableApp);
-//         this.props.cableApp.room = this.props.cableApp.cable.subscriptions.create({
-//             channel: 'ConversationsChannel',
-//             room: window.location.href.match(/\d+$/)[0]
-//         }, 
-//         {
-//             received: (updatedRoom) => {
-//                 console.log('received')
-//                 this.props.updateApp(updatedRoom)
-//             }
-//         })
-//     }
+class Test extends Component {
 
-//     render() {
-//         return (
-//             <div></div>
-//         )
-//     }
-// }
-
-class Conversation extends Component {
     constructor(props) {
-        super()
+        super(props)
         this.state = {
             newMessage: '',
             currentConversation: {},
             conversation: {},
             isConversationLoaded: false,
         }
-        axios.get(`/api/v1/conversations/${props.match.params.id}`).then(res => {
+
+        axios.get(`/api/v1/conversations/${props.match.params.id}`)
+        .then(res => {
             console.log('get conversation')
             let conversation = res.data
             this.setState({ conversation, isConversationLoaded: true})
           })
-            .catch(error => {
-              console.log(error);
-            });
+        .catch(error => {
+            console.log(error);
+        });
+
+        handleMessageInput = (event) => {
+            this.setState({
+                newMessage: event.target.value
+            })
+        }
+    
+        submitMessage = (event) => {
+            event.preventDefault()
+            this.setState({
+                newMessage: ''
+            })
+            const data = {
+                text: this.state.newMessage,
+                conversation_id: this.state.conversation.id
+            }
+            setAxiosHeaders()
+            axios.post("/api/v1/messages", data)
+                .then(result => {
+                    // this.props.createMessage(todoItem)
+                    let messageDiv = document.getElementById('messages')
+                    messageDiv.scrollTop = messageDiv.scrollHeight
+                    event.target.reset()
+                })
+        }
         // axios.get(`/api/v1/conversations/${props.match.params.id}`)
         //     .then(res => {
         //         console.log('getting conv data')
@@ -97,32 +102,7 @@ class Conversation extends Component {
         })
     }
 
-    handleMessageInput = (event) => {
-        this.setState({
-            newMessage: event.target.value
-        })
-    }
-
-    submitMessage = (event) => {
-        event.preventDefault()
-
-        this.setState({
-            newMessage: ''
-        })
-
-        const data = {
-            text: this.state.newMessage,
-            conversation_id: this.state.conversation.id
-        }
-        setAxiosHeaders()
-
-        axios.post("/api/v1/messages", data)
-            // .then(resp => resp.json())
-            .then(result => {
-                let messageDiv = document.getElementById('messages')
-                messageDiv.scrollTop = messageDiv.scrollHeight
-            })
-    }
+    
 
     render() {
         return (
@@ -177,4 +157,4 @@ class Conversation extends Component {
     }
 }
 
-export default Conversation
+export default Test

@@ -5,7 +5,7 @@ import NewRequest from './NewRequest';
 import Profile from './Profile';
 import Request from './Request';
 import Requests from './Requests';
-import Test from './Test';
+import Test from './Messenger/Test';
 import NotFound from './NotFound';
 import Conversation from './Messenger/Conversation';
 import ConversationsList from './Messenger/ConversationsList'

@@ -26,7 +26,7 @@ class Api::V1::ConversationsController < ApplicationController
         @conversation = Conversation.new(title: conversation_params[:title], requester_id: conversation_params[:requester_id], request_id: conversation_params[:request_id], helpr_id: current_user.id)
         # @conversation = current_user.conversations.build(conversation_params)
         if @conversation.save
-            serialized_data = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
+            serialized_data = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(@conversation)).serializable_hash
             ActionCable.server.broadcast 'conversations_channel', serialized_data
             head :ok
         end

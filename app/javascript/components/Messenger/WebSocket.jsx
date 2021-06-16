@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 
-class RoomWebSocket extends Component {
+class WebSocket extends Component {
     componentDidMount() {
-        // if I don't use the getRoomData() function here, nothing renders on the RoomShow component
         this.props.getRoomData(window.location.href.match(/\d+$/)[0])
-        // the subscriptions.create() method is sending params to the subscribed action in my RoomsChannel
         console.log('cableAppp', this.props.cableApp);
         this.props.cableApp.room = this.props.cableApp.cable.subscriptions.create({
             channel: 'ConversationsChannel',
@@ -25,4 +23,4 @@ class RoomWebSocket extends Component {
     }
 }
 
-export default RoomWebSocket
+export default WebSocket
