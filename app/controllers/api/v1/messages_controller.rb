@@ -21,13 +21,16 @@ class Api::V1::MessagesController < ApplicationController
         if @message.save
             puts "successfully saved a message!"
             # ConversationsChannel.broadcast_to(conversation, {
-            #     conversation: ConversationSerializer.new(conversation),
+                #     conversation: ConversationSerializer.new(conversation),
             #     users: UserSerializer.new(conversation.users),
             #     messages: MessageSerializer.new(conversation.messages)
             # })
             serialized_data = ActiveModelSerializers::Adapter::Json.new(MessageSerializer.new(@message)).serializable_hash
             MessagesChannel.broadcast_to conversation, serialized_data
-            head :ok
+            render json: @message
+            # render json: MessageSerializer.new(@message)        
+            # head :ok
+            puts "MESSAGE :: #{@message.text}"
         end
         # render json: MessageSerializer.new(@message)
         # render json: @message, status: :created

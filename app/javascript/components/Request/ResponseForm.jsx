@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import setAxiosHeaders from '../AxiosHeaders'
 
 class ResponseForm extends Component {
 
@@ -24,9 +25,9 @@ class ResponseForm extends Component {
 
     handleSubmit = () => {
         
-        const csrfToken = document.querySelector('[name=csrf-token]').content
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
-        
+        // const csrfToken = document.querySelector('[name=csrf-token]').content
+        // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+        setAxiosHeaders()
         const data = {
             title: this.state.request_data.title,
             requester_id: this.state.request_data.user_id,

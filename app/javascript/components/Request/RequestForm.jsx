@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { Label } from 'semantic-ui-react';
 import { Form } from 'formsy-semantic-ui-react';
 import axios from 'axios'
-import setAxiosHeaders from './AxiosHeaders';
+import setAxiosHeaders from '../AxiosHeaders';
 
 
 const selectOptions = [

@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { Label } from 'semantic-ui-react';
 import { Form } from 'formsy-semantic-ui-react';
 import axios from 'axios'
-import setAxiosHeaders from './AxiosHeaders';
+import setAxiosHeaders from '../AxiosHeaders';
 
 
 const selectOptions = [
@@ -33,8 +33,9 @@ class EditRequest extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = () => {
-    const csrfToken = document.querySelector('[name=csrf-token]').content
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+    // const csrfToken = document.querySelector('[name=csrf-token]').content
+    // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+    setAxiosHeaders()
     const data = {
       id: this.state.id,
       description: this.state.description,

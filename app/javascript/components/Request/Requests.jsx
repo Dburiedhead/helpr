@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios';
-import Map from './Map';
+import Map from '../Map/Map';
 // import Test from './Test';
-import Filters from './Filters';
+import Filters from '../Filters';
 import RequestCard from './RequestCard'
 // import Row from 'react-bootstrap/Row';
 // import Col from 'react-bootstrap/Col';
@@ -32,6 +32,7 @@ class Requests extends Component {
         axios.get(`/api/v1/requests/`).then(res => {
             let user_requests = res.data
             this.setState({ user_requests })
+            this.props.parentCallback(user_requests);
         })
             .catch(error => {
                 console.log(error);

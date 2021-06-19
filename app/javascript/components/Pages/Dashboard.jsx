@@ -6,9 +6,9 @@ import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import setAxiosHeaders from './AxiosHeaders';
+import setAxiosHeaders from '../AxiosHeaders';
 import { Link } from 'react-router-dom';
-import EditRequest from './EditRequest';
+import EditRequest from '../Request/EditRequest';
 
 function handleDeleteRequest(id) {
     console.log(id, 'deleted')

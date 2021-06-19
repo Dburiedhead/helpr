@@ -4,6 +4,7 @@ import axios from 'axios';
 import ActionCable from 'actioncable'
 import setAxiosHeaders from '../AxiosHeaders';
 import WebSocket from './WebSocket'
+import TestApp from './TestApp'
 
 const cableApp = {}
 cableApp.cable = ActionCable.createConsumer("ws://localhost:3000/cable");
@@ -127,6 +128,7 @@ class Conversation extends Component {
     render() {
         return (
             <div>
+                <TestApp id={this.props.match.params.id} />
                 { this.state.conversation ? (
                     <div id='conversation-show'>
                         <h1 id='conversation-header'>Welcome to the {this.state.conversation.title} conversation!</h1>
@@ -146,9 +148,6 @@ class Conversation extends Component {
                                             // const avatar = this.whichAvatar(message)
                                             <ListGroup.Item key={index}>{text} - {user_id} - {new Date (`${created_at}`).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} </ListGroup.Item>
                                         })}
-                                     {/* : 
-                                        <h3>This conversation has no messages yet - be the first to post!</h3>
-                                    } */}
                                 </ListGroup> : <p>No messages yet</p>}
                             </div>
                         </div>
@@ -160,7 +159,7 @@ class Conversation extends Component {
                         </form>
                     </div>
                 ) : null}
-                {
+                {/* {
                     this.state.isConversationLoaded ?
                         <WebSocket
                             cableApp={cableApp}
@@ -170,7 +169,7 @@ class Conversation extends Component {
                         />
                         : null
 
-                }
+                } */}
                 {/* <WebSocket/> */}
             </div>
         )
