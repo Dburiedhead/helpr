@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :requests, param: :id
       get 'current_user_request', to: 'requests#get_request_by_user_id'
+      get 'current_user_first_name', to: 'messages#get_user_first_name'
+      get 'current_user_first_name', to: 'messages#get_user_first_name'
+      get 'current_user_full_name', to: 'conversations#get_user_full_name'
       get 'unfulfilled_request', to: 'request#unfulfilled_request'
       resources :conversations, only: [:index, :show, :create, :destroy], param: :id
       resources :messages, only: [:index, :show, :create]
