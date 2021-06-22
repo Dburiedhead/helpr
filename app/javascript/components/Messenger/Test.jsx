@@ -3,7 +3,6 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 import ActionCable from 'actioncable'
 import setAxiosHeaders from '../AxiosHeaders';
-import WebSocket from './WebSocket'
 
 const cableApp = {}
 cableApp.cable = ActionCable.createConsumer("ws://localhost:3000/cable");

@@ -11,29 +11,25 @@ class Api::V1::MessagesController < ApplicationController
         @messages = Message.all
         render json: @messages
     end
+
+    def get_user_first_name
+        user_first_name = current_user.first_name
+        render json: user_first_name
+    end
     
     def create
         @message = Message.new(message_params)
         @message.user = current_user
         @message.save
-        puts "CONVERSATION ID IS :: #{message_params}"
         conversation = Conversation.find(message_params[:conversation_id])
         if @message.save
             puts "successfully saved a message!"
-            # ConversationsChannel.broadcast_to(conversation, {
-                #     conversation: ConversationSerializer.new(conversation),
-            #     users: UserSerializer.new(conversation.users),
-            #     messages: MessageSerializer.new(conversation.messages)
-            # })
             serialized_data = ActiveModelSerializers::Adapter::Json.new(MessageSerializer.new(@message)).serializable_hash
             MessagesChannel.broadcast_to conversation, serialized_data
+            puts "SERIALIZED DATA #{@message.conversation_id}"
             render json: @message
-            # render json: MessageSerializer.new(@message)        
-            # head :ok
-            puts "MESSAGE :: #{@message.text}"
+            
         end
-        # render json: MessageSerializer.new(@message)
-        # render json: @message, status: :created
     end
 
     # def create
