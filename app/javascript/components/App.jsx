@@ -10,20 +10,18 @@ import Requests from './Request/Requests';
 import Conversation from './Messenger/Conversation';
 import ConversationsList from './Messenger/ConversationsList'
 import Test from './Messenger/Test';
-import TestApp from './Messenger/TestApp'
 
 const App = () => {
     return (
         <div className="helpr-app">
             <Switch>
-                <Route exact path='/' component = { Home } />
+                <Route exact path='/' component = { Requests } />
                 <Route exact path='/request/:id' component = { Request } />
                 <Route exact path='/new_request/' component = { NewRequest } />
                 <Route exact path='/dashboard/' component = { Dashboard } />
                 <Route exact path='/profile/' component = { Profile } />
                 <Route exact path='/conversations/' component = { ConversationsList } />
                 <Route exact path='/conversations/:id' component = { Conversation } />
-                <Route exact path='/test/' component = { TestApp } />
                 <Route component = { NotFound } />
             </Switch>
         </div>
