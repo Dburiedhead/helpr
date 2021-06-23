@@ -5,12 +5,14 @@ Rails.application.routes.draw do
   end
   
   devise_scope :user do
-    root to: 'devise/sessions#new'
+    # root to: 'devise/sessions#new'
+    root to: 'pages#index'
   end
   
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :requests, param: :id
+      # get 'is_signed_in', to: 'requests#is_signed_in'
       get 'current_user_request', to: 'requests#get_request_by_user_id'
       get 'current_user_first_name', to: 'messages#get_user_first_name'
       get 'current_user_first_name', to: 'messages#get_user_first_name'

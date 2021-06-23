@@ -1,13 +1,25 @@
 class Api::V1::RequestsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index]
   before_action :set_request, only: [:show, :edit, :update, :destroy]
 
+  # def is_signed_in
+  #   if user_signed_in?
+  #       render body: "true"
+  #   else
+  #       render json: {}, status: 401
+  #   end
+  # end
+
   def index
-    @requests = Request.where.not("user_id = ?", current_user.id)
-    # @requests = Request.where(:request_status => "opened" || "pending")
-    render json: @requests
+    if user_signed_in?
+      @requests = Request.where.not("user_id = ?", current_user.id)
+      # @requests = Request.where(:request_status => "opened" || "pending")
+      render json: @requests
+    else
+      render body: 'Please sign in to access the application', status: 401
+end
   end
-  
+
   def show_request
     @request = Request.find(params[:id])
   end
