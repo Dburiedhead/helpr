@@ -25,11 +25,11 @@ function setFeatures() {
     }
 }
 
-  let features = []
+let features = []
 
-  const layerSource = {
-    type: 'FeatureCollection',
-    features: features,
+const layerSource = {
+type: 'FeatureCollection',
+features: features,
 };
 
 const aLayer = {
@@ -45,10 +45,10 @@ const geolocateStyle = {
         margin: 10
     };
 
-    const style = {
-        width: '100%',
-        height: '50vh',
-    }
+const style = {
+    width: '100%',
+    height: '50vh',
+}
 
 const navStyle = {
         top: 72,
