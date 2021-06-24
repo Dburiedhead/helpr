@@ -50,33 +50,33 @@ class Requests extends Component {
 
     render() {
         return (
-            <div>
-
+            <div className="container">
                 {this.state.isLogged == true ?
-                    <Container style={{ paddingTop: '2%', background: 'rgb(255, 255, 255)' }}>
-                        <Map locator={true} search={true} marker={this.state.user_requests} show_results={true} parentCallback={this.handleResults} />
-                        {/* Filter unfulfilled */}
-                        <h2><Counter requests={this.state.user_requests} />unfulfilled requests</h2>
-                        <Link to='/new_request'>Single Request</Link>
-                        <p>All requests</p>
-                        <Filters />
-                        {this.state.viewportResults.map(({ id, title, description, latitude, longitude, request_type, user_id, fulfilled, created_at, updated_at }, index) =>
-                            <RequestCard
-                                key={index}
-                                id={id}
-                                title={title}
-                                description={description}
-                                latitude={latitude}
-                                longitude={longitude}
-                                request_type={request_type}
-                                user_id={user_id}
-                                fulfilled={fulfilled}
-                                created={created_at}
-                                updtated={updated_at}
-                            />
-                        )}
-
-                    </Container>
+                    <Row>
+                        <Col md={6}>
+                            <Map locator={true} search={true} marker={this.state.user_requests} show_results={true} parentCallback={this.handleResults} />
+                            <h2><Counter requests={this.state.user_requests} />unfulfilled requests</h2>
+                        </Col>
+                        <Col md={6}>
+                            <Filters />
+                            {/* Filter unfulfilled */}
+                            {this.state.viewportResults.map(({ id, title, description, latitude, longitude, request_type, user_id, fulfilled, created_at, updated_at }, index) =>
+                                <RequestCard
+                                    key={index}
+                                    id={id}
+                                    title={title}
+                                    description={description}
+                                    latitude={latitude}
+                                    longitude={longitude}
+                                    request_type={request_type}
+                                    user_id={user_id}
+                                    fulfilled={fulfilled}
+                                    created={created_at}
+                                    updtated={updated_at}
+                                />
+                            )}
+                        </Col>
+                    </Row>
                     :
                     <div className="vw-100 vh-100 primary-color align-items-center justify-content-center">
                         <Container className="secondary-color" style={{ paddingTop: '2%', background: 'rgb(255, 255, 255)' }}>
@@ -86,14 +86,10 @@ class Requests extends Component {
                                     Help people around you and get help from them
                                 </p>
                                 <hr className="my-4" />
-                                {/* <Link
-                                to="/users/sign_in"
-                                className="btn btn-lg custom-button"
-                                role="button"
-                                >
-                                Sign in
-                            </Link> */}
-                                <Button className="btn btn-lg custom-button" href="/users/sign_in">Sign in</Button>
+                                <Link to="/users/sign_in" className="btn btn-lg custom-button" role="button">
+                                    Sign in
+                                </Link>
+                                {/* <Button className="btn btn-lg custom-button" href="/users/sign_in">Sign in</Button> */}
                             </Jumbotron>
                             <Row>
                                 <Col>

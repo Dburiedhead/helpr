@@ -17,7 +17,8 @@ class Api::V1::RequestsController < ApplicationController
       render json: @requests
     else
       render body: 'Please sign in to access the application', status: 401
-end
+    end
+    # ShownRequestsCleanupJob.set(wait: 15.seconds).perform_later
   end
 
   def show_request
@@ -31,7 +32,7 @@ end
   end
 
   def get_unfulfilled_request
-    @unfulfilled_request = Request.where("request_status = ?", "unfulfilled")
+    @unfulfilled_request = Request.where("fulfilled = ?", "false")
     render json: @unfulfilled_request
   end
 
