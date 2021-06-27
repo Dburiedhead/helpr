@@ -19,8 +19,16 @@
     </div>
 
     <div class="field form-group">
+      <% if resource.gov_approved_id.attached? %>
+        <p>You've registered a government approved ID</p><i data-feather="check-circle"></i>
+      <% else %>
+        <p>You need a government approved ID </p><i data-feather="x-circle"></i>
+      <% end %>
+    </div>
+
+    <div class="field form-group">
       <% if resource.avatar.attached? %>
-        <%= image_tag(resource.avatar) %>
+        <%= image_tag(resource.avatar), height: 40, width: 40, class: "rounded-circle" %>
       <% else %>
         <%= image_tag('/default_avatar.png') %>
       <% end %>

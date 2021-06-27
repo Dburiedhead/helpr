@@ -2,12 +2,13 @@ class User < ApplicationRecord
   has_many :requests
   has_many :conversations, through: :messages
   has_many :messages
+  has_one_attached :avatar
+  has_one_attached :gov_approved_id
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
-  has_one_attached :avatar
   after_commit :add_default_avatar, on: %i[create update]
 
   
@@ -29,9 +30,7 @@ class User < ApplicationRecord
           )
         ),
         filename: 'default_avatar.png',
-        content_type: 'image/png', 'image/jpg', 'image/jpeg'
-        # content_type: 'image/png, image/jpg, application/pdf'
-        # content_type => /^document\/(png|gif|jpeg)/
+        content_type: 'image/png, image/jpg, image/jpeg'
       )
     end
   end

@@ -30,7 +30,7 @@ class Api::V1::ConversationsController < ApplicationController
     end
 
     def get_user_avatar
-        user_avatar = current_user.first_name
+        user_avatar = current_user.avatar
         render json: user_avatar
     end
 
