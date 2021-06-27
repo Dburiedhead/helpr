@@ -23,7 +23,8 @@
     </div>
     <div class="justify-content-end navbar-nav">
       <div class="nav-item dropdown">
-        <button class="btn btn-secondary dropdown-toggle nav-link" type="button" id="nav-dropdown" data-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-link dropdown-toggle nav-link" type="button" id="nav-dropdown" data-toggle="dropdown" aria-expanded="false">
+          <%= image_tag(current_user.avatar_thumbnail) %>
           <%= current_user.first_name %>
         </button>
         <div aria-labelledby="nav-dropdown" class="dropdown-menu profile-dopdown-menu">

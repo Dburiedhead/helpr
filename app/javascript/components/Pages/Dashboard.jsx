@@ -20,7 +20,7 @@ function EditRequestModal(req) {
 
     return (
         <>
-            <Button variant="secondary" onClick={() => handleShow(req)}><Icon.Edit2 color="#4c4c4c" /></Button>
+            <Button variant="link" onClick={() => handleShow(req)}><Icon.Edit2 color="#4c4c4c" /></Button>
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -44,22 +44,6 @@ function EditRequestModal(req) {
         </>
     );
 }
-
-// function handleDeleteResponse(id) {
-//     console.log(id, 'deleted')
-//     setAxiosHeaders()
-//     axios.delete(`/api/v1/conversations/${id}`).then(res => {
-//       console.log('Response deleted', res);
-//       if (res.status == 204) {
-//           alert("Conversation deleted")
-//         window.location.reload();
-//       }
-//     })
-//       .catch(error => {
-//         console.log(error);
-//       });
-// }
-
 
 export default class Dashboard extends Component {
     handleDeleteRequest = (id) => {

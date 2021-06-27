@@ -24,10 +24,9 @@ class Api::V1::RequestsController < ApplicationController
     @request = Request.find(params[:id])
   end
   
-  # ? in the parameter replaced by the current_user.id
-  def get_request_by_user_id
-    @user_request = Request.where("user_id = ?", current_user.id)
-    render json: @user_request
+  def get_requests_by_user_id
+    @user_requests = Request.where("user_id = ?", current_user.id)
+    render json: @user_requests
   end
   
   def get_unfulfilled_request
