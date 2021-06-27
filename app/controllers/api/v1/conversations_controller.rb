@@ -8,13 +8,21 @@ class Api::V1::ConversationsController < ApplicationController
     end
     
     def show
-        puts "REQUEST is :: #{Request.where(:id => params[:request_id])}"
-        # puts "REQUEST COUNTER is :: #{Request.where(params[:request_id]).response_counter}"
         # @conversation = Conversation.find(params[:id])
         # render json: ConversationSerializer.new(@conversation)
         render json: @conversation
     end
     
+    def get_responses_by_user_id
+          @user_responses = Conversation.where("helpr_id = ?", current_user.id)
+          render json: @user_responses
+    end
+    
+    # def get_request_conversations_by_user_id
+    #     @user_responses = Conversation.where("helpr_id = ?", current_user.id)
+    #     render json: @user_responses
+    # end
+
     def get_user_full_name
         user_first_name = current_user.first_name
         user_last_name = current_user.last_name
@@ -27,43 +35,46 @@ class Api::V1::ConversationsController < ApplicationController
     end
 
     def create
-        
-        #     @response = current_user.responses.build(response_params)
-        #     @current_request = Request.where(:id => params[:request_id])
-    #         # @current_request = Request.find(:id => params[:request_id])
-        #     if Request.find(params[:request_id]).response_counter < 5
-        #       Request.find(params[:request_id]).update(:response_counter => Request.find(params[:request_id]).response_counter + 1, :request_status => Request.find(params[:request_id]).request_status = "pending")
-        #       if Request.find(params[:request_id]).response_counter == 4
-        #         Request.find(params[:request_id]).update(:response_counter => Request.find(params[:request_id]).response_counter + 1, :fulfilled => Request.find(params[:request_id]).fulfilled = true, :request_status => Request.find(params[:request_id]).request_status = "hidden")
-        #     #     if Request.find(params[:request_id]).response_counter == 5
-        #     #       handle_max_responses
-        #       else
-        #         handle_unauthorized
-        #       end
-        #     end
-        #   end
-        conversation_params[:helpr_id] = current_user.id
-        counter = Request.find(params[:request_id]).response_counter
-        @conversation = Conversation.new(title: conversation_params[:title], requester_id: conversation_params[:requester_id], request_id: conversation_params[:request_id], helpr_id: current_user.id)
-        # @conversation = current_user.conversations.build(conversation_params)
-        if @conversation.save
-            serialized_data = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(@conversation)).serializable_hash
-            ActionCable.server.broadcast 'conversations_channel', serialized_data
-            render json: @message
+        request = Request.find(params[:request_id])
+        counter = request.response_counter
+        if request.user_id == current_user.id
+            handle_owner
+        else
+            if Conversation.where("helpr_id = #{current_user.id} AND request_id = #{params[:request_id]}")
+                handle_already_responded
+            else
 
+                if counter < 5
+                    request.update(:response_counter => request.response_counter + 1, :request_status => request.request_status = "pending")
+                    @conversation = Conversation.new(title: conversation_params[:title], requester_id: conversation_params[:requester_id], request_id: conversation_params[:request_id], helpr_id: current_user.id)
+                    if request.response_counter == 4
+                        request.update(:response_counter => request.response_counter + 1, :request_status => request.request_status = "hidden")
+                        if @conversation.save
+                            serialized_data = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(@conversation)).serializable_hash
+                            ActionCable.server.broadcast 'conversations_channel', serialized_data
+                            render json: @conversation
+                        end
+                    end
+                    puts "COUNTER IS NOW:: #{counter}"
+                end
+            if request.response_counter == 5
+                handle_max_responses
+            end
+            end
         end
     end
 
     # def create
     # end
     def destroy
-        Conversation.find(params[:request_id]).update(:response_counter => Conversation.find(params[:request_id]).response_counter - 1)
-        if authorized?
+        request = Request.find(@conversation.request_id)
+        request.update(:response_counter => request.response_counter - 1, :request_status => request.request_status = "pending")
+        # if destroy_authorized?
           @conversation.destroy
             head :no_content
-        else
-          handle_unauthorized
-        end
+        # else
+        #   handle_unauthorized
+        # end
       end
       
     private
@@ -75,19 +86,23 @@ class Api::V1::ConversationsController < ApplicationController
             params.require(:conversation).permit(:title, :request_id, :selected, :requester_id, :helpr_id)
         end
 
-        def authorized?
-            @conversation.user == current_user
+        def destroy_authorized?
+            @conversation.requester_id == current_user.id
         end
     
         def handle_unauthorized
-            respond_to do
-                render json: { error: "You are not authorized to perform this action.", status: 401 }, status: 401
-            end
+            render body: "You are not authorized to perform this action.", status: 401
+        end
+
+        def handle_owner
+            render body: "You can\'t respond to your own request", status: 403
+        end
+
+        def handle_already_responded
+            render body: "You already responded to this request, check your conversations", status: 403
         end
 
         def handle_max_responses
-            respond_to do
-              render json: { error: "You can't respond to a request that already has 5 responses", status: 401 }, status: 401
-            end
+            render body: "You cannot respond to a request that already has 5 responses, try again when you see this request on the map", status: 403
         end
 end

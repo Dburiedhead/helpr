@@ -29,7 +29,7 @@ class User < ApplicationRecord
           )
         ),
         filename: 'default_avatar.png',
-        content_type: 'image/png'
+        content_type: 'image/png', 'image/jpg', 'image/jpeg'
         # content_type: 'image/png, image/jpg, application/pdf'
         # content_type => /^document\/(png|gif|jpeg)/
       )

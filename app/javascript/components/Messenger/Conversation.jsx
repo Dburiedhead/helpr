@@ -80,7 +80,6 @@ class Conversation extends Component {
                     <Col md={4}>
                             <div id='conversation-show'>
                                 <h1 id='conversation-header'>Reffering request : {this.state.conversation.title}</h1>
-
                                 <div id='conversation-sidebar'>
                                     <h3>Requester</h3>
                                     <h3>Helpr</h3>

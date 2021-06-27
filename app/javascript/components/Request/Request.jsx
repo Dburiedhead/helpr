@@ -13,6 +13,7 @@ import Map from '../Map/Map';
 import ResponseForm from './ResponseForm';
 import EditRequest from './EditRequest';
 import axios from 'axios';
+import setAxiosHeaders from '../AxiosHeaders';
 
 function handleDeleteRequest(id) {
     console.log(id, 'deleted')
@@ -33,7 +34,7 @@ function EditRequestModal(req) {
   
     return (
       <>
-        <Button variant="secondary" onClick={() => handleShow(req)}>Edit</Button>
+        <Button variant="primary" onClick={() => handleShow(req)}>Edit</Button>
         <Modal
           show={show}
           onHide={handleClose}
@@ -87,6 +88,24 @@ class Request extends Component {
             console.log(error);
         });
     }
+
+    handleFulfilled = (id) => {
+        alert("Are you sure you want to set this request to fulfilled ? This action can\'t be reversed");
+        const data = {
+            fulfilled: true
+        }
+        console.log("request is", id, "data is set to ", data);
+        setAxiosHeaders()
+        axios.put(`/api/v1/requests/${id}`, data)
+        .then(res => {
+          console.log(res)
+        })
+        // ,
+        // window.location.reload())
+        .catch(error => {
+        console.log(error);
+        });
+    }
     
     render() {
 
@@ -131,6 +150,11 @@ class Request extends Component {
                                     latitude= {this.state.request.latitude}
                                     longitude= {this.state.request.longitude}
                                 />
+                                {this.state.request.fulfilled == true ?
+                                    null
+                                    :
+                                    <Button variant="link" onClick={() => this.handleFulfilled(this.state.request.id)}>Set to fulfill</Button>
+                                }
                                 <Button variant='danger' onClick={() => handleDeleteRequest(this.state.request.id)}>
                                     Delete
                                 </Button>

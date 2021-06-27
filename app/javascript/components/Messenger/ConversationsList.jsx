@@ -46,13 +46,13 @@ class ConversationsList extends Component {
       <div>
         <h1>Conversations</h1>
         <ListGroup variant='flush'>
-          {this.state.conversations.map(({title, id, request_id, created_at}, index) => 
+          {this.state.conversations.map(({title, id, request_id, created_at, updated_at}, index) => 
             <ListGroup.Item key={index}>
               <Link to={`/conversations/${id}`}>
                 <h3>{title}</h3>
               </Link>
               <Link to={`/request/${request_id}`}>
-                <Button>See reffering request</Button>
+                <Button variant="text">See reffering request</Button>
               </Link>
               <p>Requester</p>
               <p>Helpr</p>

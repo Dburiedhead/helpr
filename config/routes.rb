@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       resources :requests, param: :id
       # get 'is_signed_in', to: 'requests#is_signed_in'
       get 'current_user_request', to: 'requests#get_request_by_user_id'
+      get 'current_user_responses', to: 'conversations#get_responses_by_user_id'
+      # get 'requests_conversations_by_user_id', to 'conversations#get_request_conversations_by_user_id'
       get 'current_user_first_name', to: 'messages#get_user_first_name'
       get 'current_user_first_name', to: 'messages#get_user_first_name'
       get 'current_user_full_name', to: 'conversations#get_user_full_name'

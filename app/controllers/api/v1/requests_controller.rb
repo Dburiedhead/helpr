@@ -18,26 +18,27 @@ class Api::V1::RequestsController < ApplicationController
     else
       render body: 'Please sign in to access the application', status: 401
     end
-    # ShownRequestsCleanupJob.set(wait: 15.seconds).perform_later
   end
-
+  
   def show_request
     @request = Request.find(params[:id])
   end
-
+  
   # ? in the parameter replaced by the current_user.id
   def get_request_by_user_id
     @user_request = Request.where("user_id = ?", current_user.id)
     render json: @user_request
   end
-
+  
   def get_unfulfilled_request
     @unfulfilled_request = Request.where("fulfilled = ?", "false")
     render json: @unfulfilled_request
   end
-
+  
   def show
     render json: @request
+    puts "REQUEST COUNTER IS #{@request.response_counter}"
+    ShownRequestsCleanupJob.set(wait: 15.seconds).perform_later(@request, @request.response_counter, @request.request_status)
   end
 
   def create
@@ -57,7 +58,10 @@ class Api::V1::RequestsController < ApplicationController
   def update
     if authorized?
       if @request.update(request_params)
-        render json: @request, status: :ok, location: api_v1_request_url(@request)
+        if @request.fulfilled?
+          @request.update(:request_status => @request.request_status = "closed")
+          render json: @request, status: :ok, location: api_v1_request_url(@request)
+        end
       else
         render json: @request.errors, status: :unprocessable_entity
       end

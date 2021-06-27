@@ -41,7 +41,14 @@ class ResponseForm extends Component {
             }
         }
         )
-        .catch(err => console.log(err))
+        .catch(error =>{
+            if (error.response.status == 403) {
+                alert(error.response.data);
+                window.location.href = '/';
+            } else {
+                console.log(error);
+            }
+        })
 
     };
 
