@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import axios from 'axios';
 import setAxiosHeaders from '../AxiosHeaders'
 
@@ -8,25 +9,24 @@ class ResponseForm extends Component {
 
     state = {
         request_id: '',
-        request_data: ''
+        request_data: '',
+        showAlert: false,
+        convError: ''
     }
 
     constructor(props) {
         super();
         axios.get(`/api/v1/requests/${props.request_id}`)
-        .then(res => {
-            let request_data = res.data
-            this.setState({ request_data })
-        })
-        .catch(error => {
-            console.log(error);
-        });
+            .then(res => {
+                let request_data = res.data
+                this.setState({ request_data })
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     handleSubmit = () => {
-        
-        // const csrfToken = document.querySelector('[name=csrf-token]').content
-        // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
         setAxiosHeaders()
         const data = {
             title: this.state.request_data.title,
@@ -35,20 +35,24 @@ class ResponseForm extends Component {
         };
 
         axios.post('/api/v1/conversations', data)
-        .then(res => {
-            if (res.status === 200) {
-                window.location.href = '/conversations';
+            .then(res => {
+                if (res.status === 200) {
+                    window.location.href = '/conversations';
+                }
             }
-        }
-        )
-        .catch(error =>{
-            if (error.response.status == 403) {
-                alert(error.response.data);
-                window.location.href = '/';
-            } else {
-                console.log(error);
-            }
-        })
+            )
+            .catch(error => {
+                if (error.response.status == 403) {
+                    this.setState({showAlert: true})
+                    this.setState({ convError: error.response.data })
+                    setTimeout(() => {
+                        this.setState({showAlert: false})
+                        window.location.href = '/conversations';
+                    }, 5000);
+                } else {
+                    console.log(error);
+                }
+            })
 
     };
 
@@ -57,6 +61,9 @@ class ResponseForm extends Component {
             <Col>
                 <h2>Start a conversation with {this.props.user_id}</h2>
                 <Button onClick={this.handleSubmit}>Join the room</Button>
+                <Alert variant='warning' show={this.state.showAlert}>
+                    {this.state.convError}
+                </Alert>
             </Col>
         )
     }

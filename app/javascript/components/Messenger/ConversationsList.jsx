@@ -21,26 +21,6 @@ class ConversationsList extends Component {
       });
   }
 
-  // handleSubscribe = (event) => {
-  //   const conversation_id = event.target.id
-  //   this.state.currentUser ? (this.postFirstMessage(conversation_id)) : (alert('You must be logged in to subscribe to a room.'))
-  // }
-
-  // postFirstMessage = (convId) => {
-  //   window.history.pushState(null, null, `/conversations/${conv.title}/${convId}`)
-  //   const message = {
-  //     conversation_id: convId
-  //   }
-  //   setAxiosHeaders()
-  //   axios.post('/api/v1/messages/', message).then(res => {
-  //     if (res.request.status === 201) {
-  //       alert('Message sent !');
-  //       this.areaForm.reset();
-  //     }
-  //   })
-  //     .catch(err => console.log(err))
-  // }
-
   render() {
     return (
       <div>

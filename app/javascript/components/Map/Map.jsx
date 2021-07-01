@@ -140,9 +140,7 @@ export default function Map(props, { parentCallback }) {
                     >
                         <p>{`${popupInfo.title} - ${popupInfo.user_id}`} <br />
                             {`${popupInfo.request_type} - Created ${popupInfo.created_at}`} <br />
-                            {`${popupInfo.description} - location : ${popupInfo.latitude} - ${popupInfo.longitude}`} <br />
-                            {` Status ${popupInfo.fulfilled}`} <br />
-                            {`Go to request page${popupInfo.id} - ${popupInfo.fulfilled == true ? 'Fulfilled' : 'Unfulfilled'}`}
+                            {`${popupInfo.description}`} <br />
                         </p>
                         <Button href={`/request/${popupInfo.id}`} target="_blank">Fulfill</Button>
                     </Popup>
@@ -150,7 +148,7 @@ export default function Map(props, { parentCallback }) {
                 <NavigationControl style={navStyle} />
                 <ScaleControl style={scaleControlStyle} />
             </MapGL>
-            <p>Icons made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></p>
+            <small>Icons made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
         </div>
     )
 }

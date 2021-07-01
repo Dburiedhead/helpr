@@ -20,12 +20,6 @@ class User < ApplicationRecord
     end
   end
 
-  def avatar_url
-    Rails.application.routes.url_helpers.rails_representation_url(
-      avatar.variant(resize: "150x150!").processed, only_path: true
-    )
-  end
-
   private
   def add_default_avatar
     unless avatar.attached?
@@ -36,7 +30,7 @@ class User < ApplicationRecord
           )
         ),
         filename: 'default_avatar.png',
-        content_type: 'image/png'
+        content_type: 'image/png, image/jpg'
       )
     end
   end

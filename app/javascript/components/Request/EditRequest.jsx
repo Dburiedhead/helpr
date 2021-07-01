@@ -2,8 +2,6 @@ import React, { Component } from 'react'; /* eslint-env node, browser */
 import ReactDOM from 'react-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-// import Tooltip from 'react-bootstrap/Tooltip';
-// import Form from 'react-bootstrap/Form';
 import { Label } from 'semantic-ui-react';
 import { Form } from 'formsy-semantic-ui-react';
 import axios from 'axios'
@@ -47,7 +45,7 @@ class EditRequest extends Component {
     console.log(data)
     axios.put(`/api/v1/requests/${this.state.id}`, data).then(res => {
       console.log('Request edited', res)
-      // if (res.status == 200){window.location.reload()}
+      if (res.status == 200){window.location.reload()}
     })
     .catch(error => {
       console.log(error);

@@ -9,7 +9,6 @@ import Request from './Request/Request';
 import Requests from './Request/Requests';
 import Conversation from './Messenger/Conversation';
 import ConversationsList from './Messenger/ConversationsList'
-import Test from './Messenger/Test';
 
 const App = () => {
     return (
@@ -20,8 +19,12 @@ const App = () => {
                 <Route exact path='/new_request/' component = { NewRequest } />
                 <Route exact path='/dashboard/' component = { Dashboard } />
                 <Route exact path='/profile/' component = { Profile } />
+                <Route exact path='/users/profile/:id' component = { Profile } />
                 <Route exact path='/conversations/' component = { ConversationsList } />
                 <Route exact path='/conversations/:id' component = { Conversation } />
+                <Route exact path="/users/edit" render={() => <div></div>} />
+                <Route exact path="/users/sign_in" render={() => <div></div>} />
+                <Route exact path="users/sign_out" component = { Requests } />
                 <Route component = { NotFound } />
             </Switch>
         </div>

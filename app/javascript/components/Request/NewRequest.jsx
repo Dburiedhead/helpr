@@ -4,11 +4,11 @@ import MapGL, { NavigationControl, GeolocateControl } from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 import { Label } from 'semantic-ui-react';
 import { Form } from 'formsy-semantic-ui-react';
-import axios from 'axios'
+import axios from 'axios';
 import setAxiosHeaders from '../AxiosHeaders';
-
 
 const selectOptions = [
   { value: 'task', text: 'Task' },
@@ -40,7 +40,8 @@ export default class NewRequest extends Component {
     title: '',
     request_type: '',
     latitude: null,
-    longitde: null
+    longitde: null,
+    showAlert: false
   };
 
   mapRef = React.createRef();
@@ -79,7 +80,10 @@ export default class NewRequest extends Component {
     axios.post('api/v1/requests', data)
       .then(res => {
         if (res.request.status === 201) {
-          alert('Request sent ! Thank you for your participation');
+          this.setState({showAlert: true})
+          setTimeout(() => {
+            this.setState({showAlert: false})
+          }, 5000);
           this.areaForm.reset();
         }
       }
@@ -209,6 +213,12 @@ export default class NewRequest extends Component {
 
             </Form.Group>
             <Form.Button className='submit-btn'>Submit</Form.Button>
+            <Alert variant='success' show={this.state.showAlert}>
+              <Alert.Heading>
+                Request created!
+              </Alert.Heading>
+              <p>You will find answers in the chat, check regularly</p>
+            </Alert>
           </Form>
         </Col>
       </Row>

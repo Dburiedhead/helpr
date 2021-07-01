@@ -4,15 +4,12 @@ import { BrowserRouter as Router, Link } from 'react-router-dom'
 import Counter from '../Counter'
 import axios from 'axios';
 import Map from '../Map/Map';
-import Filters from '../Filters';
 import RequestCard from './RequestCard'
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Jumbotron from 'react-bootstrap/Jumbotron';
-
-
+import { Container, Col, Row, Jumbotron, Image, Badge } from 'react-bootstrap';
+import donation from '../../assets/donation.jpg'
+import puzzle from '../../assets/puzzle.jpg'
+import question from '../../assets/question.jpg'
+import world from '../../assets/world.jpg'
 
 class Requests extends Component {
 
@@ -33,15 +30,6 @@ class Requests extends Component {
         .catch(error => {
             error.response.status == 401 ? this.setState({isLogged : false}) : console.log(error);
         });
-
-        // axios.get('/api/v1/is_signed_in')
-        // .then(res => {
-        //     console.log(res.data)
-        //     res.data == true ? this.setState({isLogged : true}) : this.setState({isLogged : false})
-        // })
-        // .catch(error => {
-        //     console.log(error);
-        // });
     }
 
     handleResults = (res) => {
@@ -50,17 +38,16 @@ class Requests extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div>
                 {this.state.isLogged == true ?
+                <Container>
                     <Row>
                         <Col md={6}>
-                            <Map locator={true} search={true} marker={this.state.user_requests} show_results={true} parentCallback={this.handleResults} />
-                            <h2><Counter requests={this.state.user_requests} />unfulfilled requests</h2>
+                            <Map locator={true} search={false} marker={this.state.user_requests} show_results={true} parentCallback={this.handleResults} />
+                            
                         </Col>
-                        <Col md={6}>
-                            <Filters />
-                            {/* Filter unfulfilled */}
-                            {this.state.viewportResults.map(({ id, title, description, latitude, longitude, request_type, user_id, fulfilled, created_at, updated_at }, index) =>
+                        <Col md={6} style={{ overflowY: 'scroll', height: '50vh' }}>
+                            {this.state.viewportResults.map(({ id, title, description, latitude, longitude, request_type, user_id, fulfilled, response_counter, created_at, updated_at }, index) =>
                                 <RequestCard
                                     key={index}
                                     id={id}
@@ -71,39 +58,78 @@ class Requests extends Component {
                                     request_type={request_type}
                                     user_id={user_id}
                                     fulfilled={fulfilled}
+                                    counter={response_counter}
                                     created={created_at}
                                     updtated={updated_at}
-                                />
+                                    />
                             )}
                         </Col>
+                        <hr/>
                     </Row>
+                    <Row>
+                        <Col>
+                            <h2>
+                                <Badge style={{ color: '#fff', backgroundColor: '#EF7B45' }}>
+                                    <Counter requests={this.state.user_requests} />
+                                </Badge> Unfulfilled requests
+                            </h2>
+                        </Col>
+                    </Row>
+                </Container>
                     :
-                    <div className="vw-100 vh-100 primary-color align-items-center justify-content-center">
+                    <div className="align-items-center justify-content-center">
                         <Container className="secondary-color" style={{ paddingTop: '2%', background: 'rgb(255, 255, 255)' }}>
-                            <Jumbotron fluid className="bg-transparent">
-                                <h1 className="display-4">Helpr Guest Home</h1>
-                                <p className="lead">
-                                    Help people around you and get help from them
-                                </p>
-                                <hr className="my-4" />
-                                <Link to="/users/sign_in" className="btn btn-lg custom-button" role="button">
-                                    Sign in
-                                </Link>
-                                {/* <Button className="btn btn-lg custom-button" href="/users/sign_in">Sign in</Button> */}
+                            <Jumbotron fluid className="bg-transparent" style={{
+                                backgroundImage: `url(${world})`,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'right',
+                                height: '50vh',
+                                backgroundSize: 'contain',
+                            }}>
+                                <h1 className="display-4">Help people around you and get help from them</h1>
+                                <Row>
+                                    <Col>
+                                        <Link to="/users/sign_in" className="btn btn-lg btn-primary" role="button">
+                                            Sign in
+                                        </Link>
+                                    </Col>
+                                </Row>
                             </Jumbotron>
-                            <Row>
-                                <Col>
-                                    <h2>Presentation</h2>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <h2>Feed</h2>
-                                    <p>Latest published requests</p>
-                                    <p>Latest fulfilled requests</p>
-                                    <p>New members</p>
-                                </Col>
-                            </Row>
+                            <hr className="my-4" />
+                            <div style={{ padding: '0 2rem' }}>
+                                <Row>
+                                    <Col style={{ textAlign: 'right', margin: 'auto'}}>
+                                        <h2>Sometimes you need help</h2>
+                                        <p>Send a request for material or task</p>
+                                        <p>See responses from nearby helprs</p>
+                                        <p>Chat with helprs</p>
+                                        <p>Select the help you need</p>
+                                        
+                                    </Col>
+                                    <Col md={8} className="image puzzle" style={{
+                                        backgroundImage: `url(${puzzle})`,
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'left',
+                                        height: '70vh',
+                                        backgroundSize: 'contain',
+                                    }}> 
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={7}>
+                                        <Image src={donation} 
+                                        style={{ width: '70rem' }}
+                                        />
+                                    </Col>
+                                    <Col style={{ textAlign: 'left', margin: 'auto'}}>
+                                        <h2>Sometimes you're the Helpr</h2>
+                                        <p>See all requests for help in your area on the map</p>
+                                        <p>Answer to either material or task requests</p>
+                                        <p>Be someone's hero of the day</p>
+                                    </Col>
+                                </Row>                            
+
+                            </div>
                         </Container>
                     </div>}
             </div>

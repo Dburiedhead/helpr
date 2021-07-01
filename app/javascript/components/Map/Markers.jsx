@@ -12,14 +12,14 @@ function Markers(props) {
     return data.map((loc, index) => (
       <Marker key={index} longitude={parseFloat(loc.longitude)} latitude={parseFloat(loc.latitude)}>
         {/* <img src={pin} width={40} alt={`request-${loc.id}-marker`} onClick={() => onClick(loc)} style={{ cursor: 'pointer' }}/> */}
-        <MapPin fill={loc.request_type === 'task' ? 'rgb(135, 221, 255)' : 'rgb(255, 169, 135)'} onClick={() => onClick(loc)} style={{ cursor: 'pointer' }} />
+        <MapPin fill={loc.request_type === 'task' ? '#A6E1FA' : '#EF7B45'} onClick={() => onClick(loc)} style={{ cursor: 'pointer' }} />
       </Marker>
     ));
   } else {
     return (
       <Marker longitude={parseFloat(data.longitude)} latitude={parseFloat(data.latitude)}>
         {/* <img src={pin} width={40} alt={`request-${data.id}-marker`} onClick={() => onClick(data)} style={{ cursor: 'pointer' }}/> */}
-        <MapPin fill={data.request_type === 'task' ? 'rgb(135, 221, 255)' : 'rgb(255, 169, 135)'} onClick={() => onClick(data)} style={{ cursor: 'pointer' }}/>
+        <MapPin fill={data.request_type === 'task' ? '#A6E1FA' : '#EF7B45'} onClick={() => onClick(data)} style={{ cursor: 'pointer' }}/>
       </Marker>
     )
   }

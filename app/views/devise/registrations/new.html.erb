@@ -35,9 +35,9 @@
         <% end %>
       </div>
       <div class="field form-group">
-        <%= f.file_field :avatar, class:"form-control", type:"file", id:"formFile" %>
+        <%= f.file_field :avatar %>
       </div>
-      
+
       <div class="field form-group">
         <%= f.label :password %>
         <% if @minimum_password_length %>

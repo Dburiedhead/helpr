@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600&family=Poppins&display=swap');
+
+#overrides body, p, span {
+  font-family: 'Poppins', sans-serif;
+  /* font-family: 'M PLUS Rounded 1c', sans-serif; */
+  font-size: 1.2rem;
+  color: #362C28
+}
+  
+body::-webkit-scrollbar-thumb, html::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  width: 2px;
+}
+#overrides h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nunito', cursive !important;
+  font-weight: 400;
+}
+  
+#overrides h2 {
+  /* text-decoration-line: underline;
+  text-decoration-color: #FBF2C0;
+  text-decoration-thickness: 10px;
+  text-decoration-style: solid; */
+  width: max-content;
+  color: #362C28;
+  background-image: linear-gradient(120deg, #FBF2C0 0%, #FBF2C0 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 0.2em;
+  background-position: 0 88%;
+  transition: background-size 0.75s ease-in;
+  
+}
+  
+#overrides .secondary-color {
+  color: #362C28;
+}
+
+#overrides a:not(.navbar-brand, .nav-link, .icon), #overrides .btn-primary {
+  color: #362C28;
+  border: none;
+  background-color: unset;
+  background-image: linear-gradient(120deg, #A6E1FA 0%, #B6EEA6 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 0.2em;
+  background-position: 0 88%;
+  transition: background-size 0.75s ease-in;
+  border-radius: 0.3rem;
+}
+
+#overrides a:hover, #overrides h2:hover {
+  background-size: 100% 20rem;
+}
+
+#overrides .btn-primary:hover {
+  color: #362C28;
+  background-size: 100% 20rem;
+}
+
+#overrides .helpr-app, .pages {
+    margin-top: 5rem;
+}
+
+#overrides .navbar.navbar-expand-md.navbar-light.fixed-top {
+
+}
+
+#overrides .navbar-nav {
+    align-items: center;
+}
+
+#overrides .profile-dopdown-menu {
+    left: -7.5rem !important;
+}
+
+/* Containers */
+#overrides .container {
+    margin: 0 !important;
+    max-width: 100vw !important;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* Alert */
+#overrides .session-alert-container {
+    position: fixed;
+    z-index: 99;
+}
+
+#overrides .alert.fade.show {
+    max-width: 20vw;
+    margin: 1rem auto;
+    color: #4d4d4d;
+    background-color: #cce5ffe0;
+    border-color: #b8daff;
+}
+
+#overrides .alert-success {
+	background-color: #7ac4b1;
+	border-color: rgb(107, 182, 123);
+}
+
+#overrides .alert-danger {
+	background-color: #7ac4b1;
+	border-color: rgb(182, 107, 182);
+}
+
+#overrides .alert .button.close {
+    color: #ffffff;
+}

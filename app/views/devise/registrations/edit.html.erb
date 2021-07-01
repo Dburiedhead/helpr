@@ -37,7 +37,7 @@
             <% end %>
           </div>
           <div class="field form-group">
-            <%= f.file_field :gov_approved_id, class:"form-control", type:"file", id:"formFile", accept: 'image/png, image/jpg, image/jpeg, application/pdf' %>
+            <%= f.file_field :gov_approved_id, accept: 'image/png, image/jpg, image/jpeg, application/pdf' %>
           </div>
 
           <div class="field form-group">
@@ -45,12 +45,19 @@
           </div>
           <% if resource.avatar.attached? %>
             <div class="field form-group">
-              <%= image_tag(resource.avatar) %>
+              <%= image_tag(resource.avatar_thumbnail) %>
             </div>
           <% end %>
 
           <div class="field form-group">
-            <%= f.file_field :avatar, class:"form-control", type:"file", id:"formFile" %>
+            <%= f.file_field :avatar %>
+          </div>
+
+          <div class="field form-group">
+              <%= image_tag(resource.profile_avatar_thumbnail) %>
+          </div>
+          <div class="field form-group">
+            <%= f.file_field :profile_avatar %>
           </div>
           
           <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -76,7 +83,7 @@
           </div>
 
           <div class="actions form-group">
-            <%= f.submit "Update", class:"btn btn-primary" %>
+            <%= f.submit "Update" %>
           </div>
         <% end %>
       </div>

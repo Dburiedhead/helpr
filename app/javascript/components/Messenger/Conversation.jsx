@@ -33,7 +33,7 @@ class Conversation extends Component {
             .then(response => {
                 let messages = response.data.messages;
                 let conversation = response.data
-                this.setState({ messages,conversation });
+                this.setState({ messages, conversation });
             })
             .catch(error => {
                 console.log(error);
