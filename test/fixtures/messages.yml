@@ -1,9 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  text: MyString
+  text: Hey
   conversation: one
+  user_id: dianka.id
 
 two:
-  text: MyString
+  text: Hi
   conversation: two
+  user_id: juliette.id
