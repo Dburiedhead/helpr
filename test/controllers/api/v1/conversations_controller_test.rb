@@ -1,9 +1,10 @@
 require 'test_helper'
 
 class Api::V1::ConversationsControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+
+  setup do
+    @conversation = conversations(:one)
+  end
 
   # index
   test "should get index as json" do
@@ -18,7 +19,6 @@ class Api::V1::ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   # show
   test "should return conversation" do
-    conversation = conversations(:one)
     get conversation_url(conversation)
     assert_response :success
   end
@@ -34,6 +34,6 @@ class Api::V1::ConversationsControllerTest < ActionDispatch::IntegrationTest
       post '/api/v1/conversations', params: { conversation: { helpr_id: dianka.id, requester_id: juliette.id, title: requests(:one).title, selected: false } }, as: :json
     end
     
-    assert_response :suces
+    assert_response :success
   end
 end

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: I need cardboard
+  user_id: 1
+  description: Hey I need cardboard for a school art project
+  latitude: 48.911414
+  longitude: 2.220459
+  request_type: task
+
+two:
+  title: I need help for my plants
+  user_id: 2
+  description: Hi everyone I need someone to water my plants while I travel
+  latitude: 48.91024
+  longitude: 2.219001
+  request_type: material

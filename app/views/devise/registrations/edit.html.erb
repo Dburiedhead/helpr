@@ -39,26 +39,6 @@
           <div class="field form-group">
             <%= f.file_field :gov_approved_id, accept: 'image/png, image/jpg, image/jpeg, application/pdf' %>
           </div>
-
-          <div class="field form-group">
-            <%#= image_tag(resource.avatar_thumbnail), height: 40, width: 40, class: "rounded-circle" if resource.avatar.attached? %>
-          </div>
-          <% if resource.avatar.attached? %>
-            <div class="field form-group">
-              <%= image_tag(resource.avatar_thumbnail) %>
-            </div>
-          <% end %>
-
-          <div class="field form-group">
-            <%= f.file_field :avatar %>
-          </div>
-
-          <div class="field form-group">
-              <%= image_tag(resource.profile_avatar_thumbnail) %>
-          </div>
-          <div class="field form-group">
-            <%= f.file_field :profile_avatar %>
-          </div>
           
           <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
             <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>

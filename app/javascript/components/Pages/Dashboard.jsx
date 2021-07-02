@@ -1,7 +1,6 @@
 import React, { Component, useState, useCallback } from 'react';
 import { Tabs, Tab, Container, Table, Modal, Button, Alert } from 'react-bootstrap';
 import { Form, Dropdown, Radio } from 'semantic-ui-react'
-// import { Form, Radio } from 'formsy-semantic-ui-react';
 import axios from 'axios';
 import setAxiosHeaders from '../AxiosHeaders';
 import { Link } from 'react-router-dom';
@@ -119,7 +118,6 @@ export default class Dashboard extends Component {
                                             <td>
                                                 {fulfilled == true ? <Button variant="text" disabled><Icon.CheckCircle color="#B6EEA6" /></Button>
                                                     : <ConfirmFulfilled id={id} />
-                                                    // <Button variant="primary" onClick={() => this.ConfirmFulfilled(id)}>Click to fulfill</Button>
                                                 }
                                             </td>
                                             <td>{description}</td>
@@ -240,15 +238,6 @@ export function ConfirmFulfilled(req) {
                         
                         setAxiosHeaders()
                         axios.put(`/api/v1/conversations/${resId}`, resp_data)
-                        // axios.put(`/api/v1/requests/${req.id}`, req_data)
-                        // .then(res => {
-                        //     if (res.status == 200) { 
-                        //         axios.put(`/api/v1/conversations/${resId}`, resp_data)
-                        //     }
-                        // })
-                        // .catch(error => {
-                        //     console.log(error);
-                        // });
                     }
                     }>
                         Fulfill

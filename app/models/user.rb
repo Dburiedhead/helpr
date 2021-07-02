@@ -21,6 +21,7 @@ class User < ApplicationRecord
   end
 
   private
+  
   def add_default_avatar
     unless avatar.attached?
       avatar.attach(

@@ -1,7 +1,5 @@
-import React, { useState, useRef } from 'react';
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import MapGL, { Popup, NavigationControl, ScaleControl, GeolocateControl, Layer, Source } from 'react-map-gl'
-// eslint-disable-next-line import/no-webpack-loader-syntax
+import React, { useState, useRef } from 'react'; // eslint-disable-next-line import/no-webpack-loader-syntax
+import MapGL, { Popup, NavigationControl, ScaleControl, GeolocateControl, Layer, Source } from 'react-map-gl' // eslint-disable-next-line import/no-webpack-loader-syntax
 import Geocoder from "react-map-gl-geocoder";
 import Button from 'react-bootstrap/Button';
 import Markers from './Markers';
@@ -91,14 +89,12 @@ export default function Map(props, { parentCallback }) {
                             let inBounds = [];
                             let map = mapRef.current.getMap();
                             let bounds = map.getBounds();
-                            // console.log(bounds)
                             props.marker.forEach(marker => {
                                 let coordinates = [marker.longitude, marker.latitude]
                                 if (bounds.contains(coordinates)) {
                                     inBounds.push(marker)
                                 }
                             });
-                            // console.log(inBounds);
                             props.parentCallback(inBounds)
                         }
 
@@ -138,10 +134,10 @@ export default function Map(props, { parentCallback }) {
                         closeButton={true}
                         onClose={setPopupInfo}
                     >
-                        <p>{`${popupInfo.title} - ${popupInfo.user_id}`} <br />
-                            {`${popupInfo.request_type} - Created ${popupInfo.created_at}`} <br />
+                        <small>{`${popupInfo.title}`} <br />
+                            {`${popupInfo.request_type} - Created ${popupInfo.created_at} by ${popupInfo.user_id} `} <br />
                             {`${popupInfo.description}`} <br />
-                        </p>
+                        </small>
                         <Button href={`/request/${popupInfo.id}`} target="_blank">Fulfill</Button>
                     </Popup>
                 )}

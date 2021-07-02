@@ -14,11 +14,11 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :requests, param: :id
-      resources :users, param: :id
+      resources :users, only: [:show], param: :id
       resources :conversations, only: [:index, :show, :create, :destroy, :update], param: :id
       resources :messages, only: [:index, :show, :create]
       mount ActionCable.server => '/cable'
-      get 'get_user_data', to: 'users#get_user_data'
+      get 'current_user_data', to: 'users#get_current_user_data'
       get 'current_user_requests', to: 'requests#get_requests_by_user_id'
       get 'current_user_responses', to: 'conversations#get_responses_by_user_id'
       get 'current_user_help', to: 'conversations#get_responses_help'

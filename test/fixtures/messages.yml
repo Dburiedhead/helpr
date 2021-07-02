@@ -2,10 +2,10 @@
 
 one:
   text: Hey
-  conversation: one
+  conversation: 1
   user_id: dianka.id
 
 two:
   text: Hi
-  conversation: two
+  conversation: 1
   user_id: juliette.id

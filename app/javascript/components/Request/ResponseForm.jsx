@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
+import { Col, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import setAxiosHeaders from '../AxiosHeaders'
 

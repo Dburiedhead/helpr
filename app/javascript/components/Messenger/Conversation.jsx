@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ActionCable from 'actioncable'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Row, Col } from 'react-bootstrap';
 import ChatFeed from "./ChatFeed";
 import MessageForm from "./MessageForm";
 
@@ -24,8 +23,7 @@ class Conversation extends Component {
     componentDidMount() {
         this.getData();
         this.createSubscription()
-        let messageBox = document.getElementById('chat-feed')
-        messageBox.scrollTop = messageBox.scrollHeight
+        // document.getElementById('chat-feed').scrollTop = document.getElementById('chat-feed').scrollHeight
     }
 
     getData() {
@@ -41,13 +39,12 @@ class Conversation extends Component {
     }
 
     createMessage(message) {
-        const messages = [message, ...this.state.messages];
+        const messages = [...this.state.messages, message];
         this.setState({ messages });
     }
 
     updateApp = message => {
         console.log('updated with this new message', message)
-        this.setState({ messages: [...this.state.messages, message] })
         console.log(this.state.messages)
     }
 
@@ -69,24 +66,18 @@ class Conversation extends Component {
                 <Row>
                     <Col md={8}>
                         <Row>
-                            {this.state.messages ? (
+                            {this.state.messages.length > 0 ? (
                                 <ChatFeed messages={this.state.messages} getData={this.getData} />
-                            ) : <h3>There're no messages in this conversation regarding {this.state.conversation.title}</h3>}
+                            ) : <h3>There're no messages in this conversation reffering to {this.state.conversation.title}</h3>}
                         </Row>
                         <Row>
                             <MessageForm createMessage={this.createMessage} conversation_id={this.state.conversation.id} />
                         </Row>
                     </Col>
                     <Col md={4}>
-                            <div id='conversation-show'>
-                                <h1 id='conversation-header'>Reffering request : {this.state.conversation.title}</h1>
-                                <div id='conversation-sidebar'>
-                                    <h3>Requester</h3>
-                                    <h3>Helpr</h3>
-                                </div>
-
-
-                            </div>
+                        <div id='conversation-show'>
+                            <h2 id='conversation-header'>Reffering request : {this.state.conversation.title}</h2>
+                        </div>
                     </Col>
                 </Row>
 

@@ -23,13 +23,11 @@ class Api::V1::RequestsController < ApplicationController
   
   def show
     render json: @request
-    puts "REQUEST COUNTER IS #{@request.response_counter}"
     ShownRequestsCleanupJob.set(wait: 15.seconds).perform_later(@request, @request.response_counter, @request.request_status)
   end
 
   def create
     @request = current_user.requests.build(request_params)
-    puts "REQUEST PARAMS :: #{request_params}"
     if authorized?
       if @request.save
         render json: @request , status: :created, location: api_v1_request_url(@request)
@@ -46,8 +44,11 @@ class Api::V1::RequestsController < ApplicationController
       if @request.update(request_params)
         if @request.fulfilled?
           @request.update(:request_status => @request.request_status = "closed")
-          render json: @request, status: :ok, location: api_v1_request_url(@request)
         end
+        # if @request.response_counter == 4
+        #   @request.update(:request_status => @request.request_status = "jidden")
+        # end
+        render json: @request, status: :ok, location: api_v1_request_url(@request)
       else
         render json: @request.errors, status: :unprocessable_entity
       end
@@ -71,7 +72,6 @@ class Api::V1::RequestsController < ApplicationController
     end
     
     def request_params
-        # params.require(:request).permit(:title, :description, :latitude, :longitude, :request_type)
         params.permit(:title, :description, :latitude, :longitude, :request_type, :fulfilled, :request_status, :response_counter)
     end
 

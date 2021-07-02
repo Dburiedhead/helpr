@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Badge from 'react-bootstrap/Badge';
-import Image from 'react-bootstrap/Image';
+import { Row, Col, Card, Button, Nav, Navbar, Badge, Image } from 'react-bootstrap';
 import { BrowserRouter as Router, Link } from 'react-router-dom'
+import axios from 'axios'
 
 
 class RequestCard extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            user_name: ''
+        }
+        axios.get(`/api/v1/users/${props.user_id}}`)
+            .then(res => {
+                let user_name = res.data.first_name
+                this.setState({ user_name })
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
     render() {
         return (
             <div>
@@ -18,14 +27,14 @@ class RequestCard extends Component {
                     <Card.Body style={{ padding: '0.5rem 1.25rem' }}>
                         <Row>
                             <Col className='flex-column'>
-                                <small>Created : {new Date(`${this.props.created}`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} by {this.props.user_id}</small>
+                                <small>Created : {new Date(`${this.props.created}`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} by <a href={`/users/profile/${this.props.user_id}`}>{this.state.user_name}</a></small>
                                 {this.props.updated ?
                                     <small className="text-muted">Last update : {new Date(`${this.props.updated}`).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</small>
                                     : null
                                 }
                             </Col>
                             <Col xs={3} md={2} lg={3} style={{ textAlign: 'center' }}>
-                                <small>{this.props.counter} Helprz</small>
+                                <small>{this.props.counter} Helpr</small>
                             </Col>
                             <Col xs={2} md={2} lg={2}>
                                 <Nav.Item>

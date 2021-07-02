@@ -2,16 +2,13 @@ import React, { Component } from 'react'
 import setAxiosHeaders from '../AxiosHeaders'
 import { Form } from 'formsy-semantic-ui-react';
 import axios from 'axios'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
+import { Row, Col, Container } from 'react-bootstrap';
 
 export default class MessageForm extends Component {
 
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
-    // this.titleRef = React.createRef()
     this.state = {
       text: ''
     }
@@ -22,7 +19,6 @@ export default class MessageForm extends Component {
     axios.post('/api/v1/messages', {
       message: {
         text: this.state.text,
-        // conversation_id: window.location.href.match(/\d+$/)[0]
         conversation_id: this.props.conversation_id
       },
     })
@@ -53,7 +49,6 @@ export default class MessageForm extends Component {
                 <Form.Input
                   name='text'
                   type="text"
-                  // width={10}
                   placeholder="Write your message here..."
                   required
                   value={this.state.text}

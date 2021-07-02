@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import MapGL, { NavigationControl, GeolocateControl } from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
+import { Row, Col, Alert } from 'react-bootstrap';
 import { Label } from 'semantic-ui-react';
 import { Form } from 'formsy-semantic-ui-react';
 import axios from 'axios';
@@ -108,7 +106,6 @@ export default class NewRequest extends Component {
             >
               <GeolocateControl
                 style={geolocateStyle}
-                // positionOptions={positionOptions}
                 trackUserLocation
                 auto
               />
@@ -129,12 +126,8 @@ export default class NewRequest extends Component {
             </MapGL>
           </div>
         </Col>
-        {/* { this.state.requestLat && this.state.requestLog && <RequestForm latitude={this.state.requestLat} longitude={this.state.requestLong}/> } */}
-        {/* <RequestForm key={ this.state.requestLat } latitude={this.state.requestLat} longitude={this.state.requestLong}/> */}
         <Col>
           <Form
-            // style={{ padding: '2vh 10vw' }}
-            // onSubmit={this.handleSubmit}
             className="custom-classname-is-rendered"
             ref={(event) => { this.areaForm = event; }}
             onValidSubmit={this.handleSubmit}
@@ -190,8 +183,6 @@ export default class NewRequest extends Component {
                 name='latitude'
                 label='Latitude'
                 width={5}
-                // disabled
-                // hidden
                 required
                 value={this.state.latitude}
                 onChange={this.handleChange}
@@ -203,8 +194,6 @@ export default class NewRequest extends Component {
                 width={5}
                 label='Longitude'
                 required
-                // disabled
-                // hidden
                 value={this.state.longitude}
                 onChange={this.handleChange}
                 errorLabel={errorLabel}

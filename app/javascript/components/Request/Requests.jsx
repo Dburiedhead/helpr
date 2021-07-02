@@ -98,7 +98,7 @@ class Requests extends Component {
                             <hr className="my-4" />
                             <div style={{ padding: '0 2rem' }}>
                                 <Row>
-                                    <Col style={{ textAlign: 'right', margin: 'auto'}}>
+                                    <Col style={{ textAlign: 'left', margin: 'auto'}}>
                                         <h2>Sometimes you need help</h2>
                                         <p>Send a request for material or task</p>
                                         <p>See responses from nearby helprs</p>
@@ -116,7 +116,7 @@ class Requests extends Component {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col md={7}>
+                                    <Col md={8}>
                                         <Image src={donation} 
                                         style={{ width: '70rem' }}
                                         />

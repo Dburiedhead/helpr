@@ -1,7 +1,6 @@
 import React, { Component } from 'react'; /* eslint-env node, browser */
 import ReactDOM from 'react-dom';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Row, Col } from 'react-bootstrap';
 import { Label } from 'semantic-ui-react';
 import { Form } from 'formsy-semantic-ui-react';
 import axios from 'axios'
@@ -31,8 +30,6 @@ class EditRequest extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = () => {
-    // const csrfToken = document.querySelector('[name=csrf-token]').content
-    // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
     setAxiosHeaders()
     const data = {
       id: this.state.id,
@@ -54,15 +51,12 @@ class EditRequest extends Component {
 
   render() {
 
-    // const { description, title, request_type, latitude, longitude } = this.state
     const errorLabel = <Label color="red" pointing />
 
     return (
 
       <Col>
         <Form
-          // style={{ padding: '2vh 10vw' }}
-          // onSubmit={this.handleSubmit}
           className="custom-classname-is-rendered"
           ref={(event) => { this.areaForm = event; }}
           onValidSubmit={this.handleSubmit.bind(this)}
@@ -84,7 +78,7 @@ class EditRequest extends Component {
             />
             <Form.Dropdown
               name="request_type"
-              width={2}
+              width={1}
               label="Type"
               placeholder='Please select…'
               help="This is required"
@@ -118,8 +112,6 @@ class EditRequest extends Component {
               name='latitude'
               label='Latitude'
               width={5}
-              // disabled
-              // hidden
               required
               value={this.state.latitude}
               onChange={this.handleChange}
@@ -131,8 +123,6 @@ class EditRequest extends Component {
               width={5}
               label='Longitude'
               required
-              // disabled
-              // hidden
               value={this.state.longitude}
               onChange={this.handleChange}
               errorLabel={errorLabel}
