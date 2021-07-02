@@ -26,18 +26,7 @@
           <p>You need a government approved ID </p><i data-feather="x-circle"></i>
         <% end %>
       </div>
-
-      <div class="field form-group">
-        <% if resource.avatar.attached? %>
-          <%= image_tag(resource.avatar), height: 40, width: 40, class: "rounded-circle" %>
-        <% else %>
-          <%= image_tag('/default_avatar.png') %>
-        <% end %>
-      </div>
-      <div class="field form-group">
-        <%= f.file_field :avatar %>
-      </div>
-
+      
       <div class="field form-group">
         <%= f.label :password %>
         <% if @minimum_password_length %>
