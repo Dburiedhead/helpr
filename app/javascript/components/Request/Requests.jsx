@@ -89,8 +89,8 @@ class Requests extends Component {
                                 <h1 className="display-4">Help people around you and get help from them</h1>
                                 <Row>
                                     <Col>
-                                        <Link to="/users/sign_in" className="btn btn-lg btn-primary" role="button">
-                                            Sign in
+                                        <Link to="/users/sign_in">
+                                            <Button variant="primary" size="lg">Sign in</Button>
                                         </Link>
                                     </Col>
                                 </Row>
