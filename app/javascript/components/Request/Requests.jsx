@@ -5,7 +5,7 @@ import Counter from '../Counter'
 import axios from 'axios';
 import Map from '../Map/Map';
 import RequestCard from './RequestCard'
-import { Container, Col, Row, Jumbotron, Image, Badge } from 'react-bootstrap';
+import { Container, Col, Row, Jumbotron, Image, Badge, Button } from 'react-bootstrap';
 import donation from '../../assets/donation.jpg'
 import puzzle from '../../assets/puzzle.jpg'
 import question from '../../assets/question.jpg'
