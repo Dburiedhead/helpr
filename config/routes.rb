@@ -3,11 +3,6 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'pages#index', as: :authenticated_root
   end
-  
-  # devise_scope :user do
-  #   # root to: 'devise/sessions#new'
-  #   root to: 'pages#index'
-  # end
 
   root 'pages#index'
   
